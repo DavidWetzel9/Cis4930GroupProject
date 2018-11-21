@@ -1,27 +1,14 @@
 ﻿@model AdventureGuide.Models.Destinations.Destination
+@using AdventureGuide.Models.Destinations;
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Destination</h4>
+<div class="mt-1">
+    <h3>Destination Details</h3>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -76,9 +63,18 @@
         <dd>
             @Html.DisplayFor(model => model.Longitude)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(Model => Model.Keywords)
+        </dt>
+        @foreach (Keyword keyword in Model.Keywords)
+        {
+            <dd>
+                @keyword.KeywordString
+            </dd>
+        }
+
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -1,0 +1,151 @@
+﻿@model List<AdventureGuide.Models.Destinations.Keyword>
+@using AdventureGuide.Models.Destinations;
+
+<div class="modal fade" id="keywords-window" tabindex="-1" role="dialog" aria-labelledby="keywords-modal">
+    <div class="modal-content modal-backgr modal-dialog justify-content-center d-flex flex-column">
+        <div class="modal-header">
+            <h4 class="modal-title"> Keywords </h4>
+
+            <button type="button" class="close" data-dismiss="modal" data-target="keywords-modal" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="KeywordList">
+                <input type="text" name="SearchString" id="KeywordAutoComplete" placeholder="Search" />
+            </div>
+            <div id="ModalKeywordHolder">
+
+
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    Keyword keyword = Model[i];
+                    string id = $"keyword-{i}";
+                    <div id="@id">
+                        <div>
+                            <button class="btn btn-danger" type="button" onclick="removeFromModal('ModalKeywordHolder', @id)"> &#8854; </button>
+                        </div>
+                        <div>
+                            <input value="@keyword.KeywordString" class="form-control" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" onclick="addKeywordsToForm()">Add Keywords</button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $("#KeywordAutoComplete").keydown(function (event) {
+        var keypressed = event.keyCode || event.which;
+        if (keypressed == 13) { AddToDestination(); }
+    });
+
+    $(function () {
+        var tags = new Array();
+        $.ajax({
+            method: 'GET',
+            url: "@Url.Action("KeywordAutoComplete", "Destination")",
+            timeout: 60000,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    tags[i] = response[i];
+                    console.log(tags[i]);
+                }
+                console.log(tags);
+            }
+        });
+        $("#KeywordAutoComplete").autocomplete({
+            source: function (request, response) {
+                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(tags, function (item) {
+                    return matcher.test(item);
+                }));
+            }
+        });
+    });
+
+    function AddToDestination() {
+        var autoComplete = document.getElementById("KeywordAutoComplete");
+
+        var parentDiv = document.createElement("div");
+        parentDiv.classList.add("row");
+        var buttonDiv = document.createElement("div");
+        buttonDiv.classList.add("d-flex", "justify-content-center");
+        var button = document.createElement("button");
+        button.classList.add("btn", "btn-danger");
+        button.setAttribute("type", "button");
+        button.innerHTML = "&#8854";
+        var nameDiv = document.createElement("div");
+        var nameInput = document.createElement("input");
+        nameInput.value = autoComplete.value;
+
+        var keywordHolder = document.getElementById("ModalKeywordHolder");
+
+        button.addEventListener("click", function () {
+            keywordHolder.removeChild(parentDiv);
+        });
+        buttonDiv.appendChild(button);
+        nameDiv.appendChild(nameInput);
+        parentDiv.appendChild(buttonDiv);
+        parentDiv.appendChild(nameDiv);
+        keywordHolder.appendChild(parentDiv);
+        autoComplete.value = "";
+    }
+
+    function removeFromModal(parentId, childId) {
+        document.getElementById(parentId).removeChild(document.getElementById(childId));
+    }
+
+    function addKeywordsToForm() {
+        var parentDiv = document.getElementById("ModalKeywordHolder");
+        document.getElementById("KeywordForm").innerHTML = '';
+        var index = 0
+        for (var i = 0; i < parentDiv.childNodes.length; i++) {
+            var childDiv = parentDiv.childNodes[i];
+            if (childDiv.nodeType == 3) {
+                continue;
+            }
+            removeTextNodes(childDiv);
+            for (var j = 0; j < childDiv.childNodes.length; j++) {
+                removeTextNodes(childDiv.childNodes[j]);
+            }
+            var keyword = childDiv.childNodes[1].childNodes[0].value;
+            addValuesToForm(keyword, index);
+            index++;
+        }
+        $("#keywords-window").modal('hide');
+    }
+
+    function addValuesToForm(nameValue, index) {
+        var parentDiv = document.createElement("div");
+        parentDiv.classList.add("row");
+        var nameDiv = document.createElement("div");
+        var nameInput = document.createElement("input");
+        nameInput.classList.add("form-control");
+        nameInput.value = nameValue;
+        nameInput.readOnly = true;
+        nameInput.name = "Keywords[" + index + "].KeywordString";
+        nameDiv.appendChild(nameInput);
+        parentDiv.appendChild(nameDiv);
+        document.getElementById("KeywordForm").appendChild(parentDiv);
+
+    }
+
+    function removeTextNodes(parentNode) {
+        for (var i = 0; i < parentNode.childNodes.length; i++) {
+            if (parentNode.childNodes[i].nodeType == 3) {
+                parentNode.removeChild(parentNode.childNodes[i]);
+                i--;
+            }
+        }
+    }
+
+</script>
