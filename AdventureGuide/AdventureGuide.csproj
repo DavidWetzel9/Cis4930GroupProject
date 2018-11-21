@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
     <Folder Include="wwwroot\fonts\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,9 @@
+﻿@inject SignInManager<IdentityUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link" asp-page="./Index">Profile</a></li>
+    <li class="nav-item"><a class="nav-link" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index"> Manage </a></li>
+</ul>
