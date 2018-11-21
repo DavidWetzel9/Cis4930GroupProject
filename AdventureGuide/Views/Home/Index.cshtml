@@ -31,9 +31,9 @@
 </div>
 
 <div class="container d-flex justify-content-center">
-        <button class="btn btn-primary btn-lg my-3" type="button">
-            Create a new travel destination
-        </button>
+    <button class="btn btn-primary btn-lg my-3" type="button" onclick="@("window.location.href='" + @Url.Action("Create", "Destination") + "'");">
+        Create a new travel destination
+    </button>
 </div>
 
 <div class="container">
