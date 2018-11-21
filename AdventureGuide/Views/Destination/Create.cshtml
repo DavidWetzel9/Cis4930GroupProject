@@ -1,22 +1,16 @@
-﻿@model AdventureGuide.Models.Destinations.Destination
+﻿@model AdventureGuide.Models.Destinations.Destination;
+@using AdventureGuide.Models.Destinations;
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
-
-<h4>Destination</h4>
+<h3>Create Destination</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateDestination">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -52,18 +46,21 @@
                 <input asp-for="Zip" class="form-control" />
                 <span asp-validation-for="Zip" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
+                <label asp-for="Keywords" class="control-label"></label>
+                <div id="KeywordForm">
+                    @for(int i = 0; i < Model.Keywords.Count; i++)
+                    {
+                        Keyword keyword = Model.Keywords[i];
+                        string name = $"Keywords[{i}].KeywordString";
+
+                    }
+                </div>
             </div>
+            <button class="btn btn-success" onclick="openKeywordModal()"> Add Keywords </button>
             <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" asp-action="CreateDestination"/>
             </div>
         </form>
     </div>
@@ -73,3 +70,11 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<partial name="_CreateKeyword" model="Model.Keywords" />
+
+<script>
+    function openKeywordModal(e) {
+        event.preventDefault();
+        $("#keywords-window").modal({ 'show': true });
+    }
+</script>

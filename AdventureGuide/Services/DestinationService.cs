@@ -28,18 +28,14 @@ namespace AdventureGuide.Services
         public async Task<Destination> GetDestinationDetails(int id)
         {
             Destination destination = await _context.Destination.FindAsync(id);
-            // Set Keywords / Review / ImagePaths - perform a join if someone figures that out
-            // or just do individual queries idk...
+            destination.Keywords = await _context.Keyword.Where(i => i.DestinationId == destination.Id).ToListAsync();
             return destination;
         }
 
         public void CreateDestination(Destination destination)
         {
-            // (Ctrl + K) + (Ctrl + C) for block comments
-            // (Ctrl + K) + (Ctrl + U) for uncommenting blocks
-
-            //_context.Destination.Add(destination);
-            //_context.SaveChanges();
+            _context.Destination.Add(destination);
+            _context.SaveChanges();
         }
 
         private async Task<DestinationViewModel> GetDestinationsDefault(int? pageNumber)

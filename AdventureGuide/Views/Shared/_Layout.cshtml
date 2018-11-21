@@ -6,8 +6,17 @@
     <title>@ViewData["Title"] - AdventureGuide</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="~/css/glyphicon.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-star-rating/css/star-rating.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-ui/ui/widget.js"></script>
+    <script src="~/lib/jquery-ui/ui/widgets/autocomplete.js"></script>
+    <script src="~/lib/bootstrap-star-rating/js/star-rating.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -17,11 +26,12 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Destination" asp-action="Index">Destinations</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Destination" asp-action="Create">Create</a></li>
             </ul>
             <partial name="_LoginPartial" />
         </div>
@@ -38,9 +48,7 @@
     </div>
 
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/lib/bootstrap-star-rating/js/star-rating.min.js"></script>
+
     <script src="~/js/site.js"></script>
 
     @RenderSection("Scripts", required: false)

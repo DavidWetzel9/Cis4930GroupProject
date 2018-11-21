@@ -1,9 +1,11 @@
 ﻿using AdventureGuide.Models;
 using AdventureGuide.Models.Destinations;
 using AdventureGuide.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AdventureGuide.Controllers
@@ -19,6 +21,7 @@ namespace AdventureGuide.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<ActionResult> Index(int? pageNumber, string currentFilter)
         {
             if (!String.IsNullOrEmpty(currentFilter))
@@ -32,9 +35,29 @@ namespace AdventureGuide.Controllers
             return View(await _service.GetDestinationDetails(destinationId));
         }
 
+        [HttpGet]
+        public JsonResult KeywordAutoComplete()
+        {
+            List<string> keywords = new List<string>();
+            foreach(var keyword in Enum.GetNames(typeof(DestinationKeyword)))
+            {
+                keywords.Add(keyword);
+            }
+            return Json(keywords);
+        }
+
+        [Authorize]
         public ActionResult Create()
         {
             return View(new Destination());
+        }
+
+        //Destination destination
+        public ActionResult CreateDestination(Destination destination)
+        {
+            destination.UserId = _userManager.GetUserId(User);
+            _service.CreateDestination(destination);
+            return RedirectToAction("Details", new { destinationId = destination.Id });
         }
     }
 }
