@@ -2,7 +2,39 @@
     ViewData["Title"] = "Home Page";
 }
 
-<img src="~/images/banner.png" class="img-fluid rounded mx-auto d-block mb-5" alt="Responsive image">
+<script>
+    // add shadow to card when hovering over it
+    $(document).ready(function () {
+        $(".card").hover(
+            function () {
+                $(this).addClass('shadow-lg').css('cursor', 'pointer');
+            }, function () {
+                $(this).removeClass('shadow-lg');
+            }
+        );
+    });
+</script>
+
+<img src="~/images/banner.png" class="img-fluid rounded mx-auto d-block mb-5" alt="Banner image">
+
+<div class="container">
+    <div class="row my-3">
+        <div class="input-group">
+            <input class="form-control border-right-0 border" placeholder="Search destinations" />
+            <span class="input-group-append">
+                <button class="btn btn-outline-primary border-left-0 border" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="container d-flex justify-content-center">
+        <button class="btn btn-primary btn-lg my-3" type="button">
+            Create a new travel destination
+        </button>
+</div>
 
 <div class="container">
     <div class="row">
@@ -31,6 +63,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="container mt-4">
     <div class="row">
         <div class="col">
             <div class="card bg-dark text-white">
