@@ -1,7 +1,5 @@
 ﻿@inject SignInManager<IdentityUser> SignInManager
-@{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
-}
+
 <ul class="nav nav-pills flex-column">
     <li class="nav-item"><a class="nav-link" asp-page="./Index">Profile</a></li>
     <li class="nav-item"><a class="nav-link" id="change-password" asp-page="./ChangePassword">Password</a></li>
@@ -10,15 +8,16 @@
     {
         @if (User.IsInRole("Admin"))
         {
-            <li> Admin </li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="AllReviews"> Manage Reviews </a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Users"> Manage Users </a></li>
 
         }
         else if (User.IsInRole("User"))
         {
-            <li> User </li>
-
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Reviews"> Manage my Reviews </a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Delete"> Delete my Account </a></li>
         }
-        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index"> Manage </a></li>
+
     }
 
 </ul>
