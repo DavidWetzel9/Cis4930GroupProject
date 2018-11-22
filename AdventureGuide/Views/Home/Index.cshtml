@@ -17,24 +17,22 @@
 
 <img src="~/images/banner.png" class="img-fluid rounded mx-auto d-block mb-5" alt="Banner image">
 
-<div class="container">
-    <div class="row my-3">
-        <div class="input-group">
-            <input class="form-control border-right-0 border" placeholder="Search destinations" />
-            <span class="input-group-append">
-                <button class="btn btn-outline-primary border-left-0 border" type="button">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </div>
+<form asp-controller="Destination" asp-action="Index" method="get" class="d-flex justify-content-center row my-3">
+    <div class="input-group">
+        <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" />
+        <span class="input-group-append">
+            <button class="btn btn-outline-primary border-left-0 border" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
     </div>
-</div>
+</form>
 
-<div class="container d-flex justify-content-center">
-    <button class="btn btn-primary btn-lg my-3" type="button" onclick="@("window.location.href='" + @Url.Action("Create", "Destination") + "'");">
+<form asp-controller="Destination" asp-action="Create" method="get" class="d-flex justify-content-center">
+    <button class="btn btn-primary btn-lg my-3" type="submit">
         Create a new travel destination
     </button>
-</div>
+</form>
 
 <div class="container">
     <div class="row">
@@ -63,10 +61,8 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="container mt-4">
-    <div class="row">
+    <div class="row mt-4">
         <div class="col">
             <div class="card bg-dark text-white">
                 <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
