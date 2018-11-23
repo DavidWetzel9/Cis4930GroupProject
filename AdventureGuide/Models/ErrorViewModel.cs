@@ -1,5 +1,3 @@
-using System;
-
 namespace AdventureGuide.Models
 {
     public class ErrorViewModel

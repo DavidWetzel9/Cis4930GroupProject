@@ -68,6 +68,21 @@ namespace AdventureGuide.Models.Destinations
         Beach,
 
         [DisplayName("Church")]
-        Church
+        Church,
+
+        [DisplayName("Hotel")]
+        Hotel,
+
+        [DisplayName("Historic")]
+        Historic,
+
+        [DisplayName("Culture")]
+        Culture,
+
+        [DisplayName("Nature")]
+        Nature,
+
+        [DisplayName("Food")]
+        Food
     }
 }
