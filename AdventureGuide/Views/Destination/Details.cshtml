@@ -78,3 +78,45 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        <label for="star-rating" class="control-label">Rate This</label>
+        <input id="StarRating" name="star-rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5">
+        <textarea id="UserComment" placeholder="Leave Your Comment on the Destination Here!"></textarea>
+        <button onclick="SubmitReview('@Model.Id')"> Submit Review! </button>
+    </div>
+}
+else
+{
+    <label for="star-rating" class="control-label">Rate This</label>
+    <input name="star-rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" data-readonly="true">
+    <textarea placeholder="Login to Leave your Review!" disabled></textarea>
+}
+
+<div id="DestinationComment">
+    <partial name="_ReviewDetails" model="Model.Reviews" />
+</div>
+
+
+<script type="text/javascript">
+
+    function SubmitReview(id)
+    {
+        var data = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
+        $.ajax({
+            method: 'POST',
+            url: "@Url.Action("SubmitReview", "Destination")",
+            data: JSON.stringify(data),
+            timeout: 60000,
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#UserComment").val("");
+                $("#DestinationComment").html(response);
+            }
+        })
+    }
+</script>
+

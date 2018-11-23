@@ -52,12 +52,19 @@ namespace AdventureGuide.Controllers
             return View(new Destination());
         }
 
-        //Destination destination
         public ActionResult CreateDestination(Destination destination)
         {
             destination.UserId = _userManager.GetUserId(User);
             _service.CreateDestination(destination);
             return RedirectToAction("Details", new { destinationId = destination.Id });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<PartialViewResult> SubmitReview([FromBody] Review review)
+        {
+            review.Username = _userManager.GetUserName(User);
+            return PartialView("_ReviewDetails", await (_service.AddReview(review)));
         }
     }
 }

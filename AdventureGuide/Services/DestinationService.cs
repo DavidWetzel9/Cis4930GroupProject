@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
+using System.Collections.Generic;
 
 namespace AdventureGuide.Services
 {
@@ -29,13 +30,27 @@ namespace AdventureGuide.Services
         {
             Destination destination = await _context.Destination.FindAsync(id);
             destination.Keywords = await _context.Keyword.Where(i => i.DestinationId == destination.Id).ToListAsync();
+            destination.Reviews = await _context.Review.Where(i => i.DestinationId == destination.Id).ToListAsync();
             return destination;
         }
 
         public void CreateDestination(Destination destination)
         {
+            destination.RatingCount = 0;
+            destination.RatingSum = 0;
             _context.Destination.Add(destination);
             _context.SaveChanges();
+        }
+
+        public async Task<List<Review>> AddReview(Review review)
+        {
+            Destination destination = _context.Destination.Where(i => i.Id == review.DestinationId).First();
+            destination.RatingCount += 1;
+            destination.RatingSum += review.Rating;
+            _context.Review.Add(review);
+            _context.SaveChanges();
+            List<Review> reviews = await _context.Review.Where(i => i.DestinationId == review.DestinationId).ToListAsync();
+            return reviews;
         }
 
         private async Task<DestinationViewModel> GetDestinationsDefault(int? pageNumber)
@@ -62,6 +77,5 @@ namespace AdventureGuide.Services
             }
             return viewModel;
         }
-
     }
 }

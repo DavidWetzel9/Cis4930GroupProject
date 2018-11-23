@@ -1,0 +1,12 @@
+﻿@model List<AdventureGuide.Models.Destinations.Review>
+@using AdventureGuide.Models.Destinations;
+
+<div>
+    @foreach (Review review in Model)
+    {
+        <div> @review.Username </div>
+        <div> @review.Comment </div>
+        <div> @review.Rating </div>
+    }
+</div>
+
