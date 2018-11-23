@@ -71,9 +71,9 @@ namespace AdventureGuide.Areas.Identity.Pages.Account
             {
                 var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                _userManager.AddToRoleAsync(user, "User").Wait();
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "User");
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
