@@ -5,20 +5,35 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<script>
+    // change search results list "title text" to be either "Results for [place]" or "All destinations"
+    // depending on input (or lack thereof) given by user
+    $(document).ready(function () {
+        var searchString = "@ViewData["CurrentFilter"]";
+        if (searchString != "" && searchString != null) {
+            $("#resultsTitle").html("Results for \"" + searchString + "\"");
+        } else {
+            $("#resultsTitle").html("All destinations");
+        }
+    });
+</script>
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="currentFilter" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
+<form asp-action="Index" method="get" class="d-flex justify-content-center row my-3">
+    <div class="input-group">
+        <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+        <span class="input-group-append">
+            <button class="btn btn-outline-primary border-left-0 border" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
     </div>
 </form>
 
-<div>
+<p>
+    <h3 id="resultsTitle">Search results</h3>
+</p>
 
+<div>
     @if (Model.Destinations.Any())
     {
         @foreach (Destination destination in Model.Destinations)
@@ -45,3 +60,5 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+
+<a asp-action="Index" method="get" class="btn btn-default">Show all destinations</a>

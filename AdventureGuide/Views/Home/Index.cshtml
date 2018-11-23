@@ -17,79 +17,87 @@
 
 <img src="~/images/banner.png" class="img-fluid rounded mx-auto d-block mb-5" alt="Banner image">
 
-<div class="container">
-    <div class="row my-3">
-        <div class="input-group">
-            <input class="form-control border-right-0 border" placeholder="Search destinations" />
-            <span class="input-group-append">
-                <button class="btn btn-outline-primary border-left-0 border" type="button">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </div>
+<form asp-controller="Destination" asp-action="Index" method="get" class="d-flex justify-content-center row my-3">
+    <div class="input-group">
+        <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" />
+        <span class="input-group-append">
+            <button class="btn btn-outline-primary border-left-0 border" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
     </div>
-</div>
+</form>
 
-<div class="container d-flex justify-content-center">
-    <button class="btn btn-primary btn-lg my-3" type="button" onclick="@("window.location.href='" + @Url.Action("Create", "Destination") + "'");">
+<form asp-controller="Destination" asp-action="Create" method="get" class="d-flex justify-content-center">
+    <button class="btn btn-primary btn-lg my-3" type="submit">
         Create a new travel destination
     </button>
-</div>
+</form>
 
 <div class="container">
     <div class="row">
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Hotel" method="get" >
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_hotel.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Hotels</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Beach" method="get">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_beach.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Beaches</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Historic" method="get">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_historic.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Historic Places</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
-</div>
 
-<div class="container mt-4">
-    <div class="row">
+    <div class="row mt-4">
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Culture" method="get">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_art.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Art & Culture</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Nature" method="get">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_nature.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Parks & Nature</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card bg-dark text-white">
-                <img class="card-img" src="~/images/card_image_placeholder.jpg" alt="Card image">
-                <div class="card-img-bottom align-items-center d-flex justify-content-center">
-                    <h1 class="card-title p-2 mb-1">Card title</h1>
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Food" method="get">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" src="~/images/card_image_restaurant.jpg" alt="Card image">
+                    <div class="card-img-bottom align-items-center d-flex justify-content-center">
+                        <h1 class="card-title p-2 mb-1">Dining</h1>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
