@@ -37,8 +37,15 @@ namespace AdventureGuide.Models.Destinations
 
         public int? RatingCount { get; set; }
 
-        public decimal? Rating => (RatingSum / RatingCount);
-
+        public decimal? Rating
+        {
+            get
+            {
+                if (RatingCount == 0) return 0;
+                else return (RatingSum / RatingCount);
+            }
+        }
+        
         public List<ImagePath> ImagePaths { get; set; }
 
         public List<Review> Reviews { get; set; }
