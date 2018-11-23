@@ -68,12 +68,31 @@ namespace AdventureGuide.Services
         private async Task<DestinationViewModel> GetDestinationsBySearch(int? pageNumber, string searchString)
         {
             DestinationViewModel viewModel = new DestinationViewModel();
-            var destinationList = await _context.Destination.Where(s => s.Name.Contains(searchString)).ToListAsync();
-            viewModel.PageViewModel.TotalCount = destinationList.Count();
-            viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
-            foreach (Destination destination in destinationList.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
+            DestinationKeyword keyword;
+            if (Enum.TryParse<DestinationKeyword>(searchString, out keyword))
             {
-                viewModel.Destinations.Add(destination);
+                List<Keyword> keywords = _context.Keyword.Where(i => i.KeywordString.Equals(searchString)).ToList();
+                List<Destination> destinations = new List<Destination>();
+                viewModel.PageViewModel.TotalCount = destinations.Count();
+                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
+                foreach (Keyword key in keywords)
+                {
+                    destinations.Add(_context.Destination.Where(s => s.Id == key.DestinationId).First());
+                }
+                foreach(Destination destination in destinations.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
+                {
+                    viewModel.Destinations.Add(destination);
+                }
+            }
+            else
+            {
+                var destinationList = await _context.Destination.Where(s => s.Name.Contains(searchString)).ToListAsync();
+                viewModel.PageViewModel.TotalCount = destinationList.Count();
+                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
+                foreach (Destination destination in destinationList.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
+                {
+                    viewModel.Destinations.Add(destination);
+                }
             }
             return viewModel;
         }
