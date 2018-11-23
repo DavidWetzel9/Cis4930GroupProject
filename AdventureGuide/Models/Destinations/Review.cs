@@ -1,4 +1,6 @@
-﻿namespace AdventureGuide.Models.Destinations
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AdventureGuide.Models.Destinations
 {
     public class Review
     {
@@ -7,6 +9,9 @@
         public string Username { get; set; }
 
         public int DestinationId { get; set; }
+
+        [NotMapped]
+        public string DestinationName { get; set; }
 
         public decimal Rating { get; set; }
 

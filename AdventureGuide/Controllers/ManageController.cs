@@ -20,9 +20,9 @@ namespace AdventureGuide.Controllers
         }
 
         
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace AdventureGuide.Controllers
         [Authorize(Roles = "User")]
         public ActionResult Delete()
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         } 
     }
 }

@@ -24,6 +24,7 @@ namespace AdventureGuide.Services
             viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
             foreach(Review review in userReviews.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
             {
+                review.DestinationName = _context.Destination.Where(i => i.Id == review.DestinationId).First().Name;
                 viewModel.Reviews.Add(review);
             }
             return viewModel;
