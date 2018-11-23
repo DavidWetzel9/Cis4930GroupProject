@@ -43,7 +43,8 @@ namespace AdventureGuide.Controllers
         [Authorize(Roles = "User")]
         public async Task<ActionResult> Reviews(int? pageNumber)
         {
-            return View(await _service.GetUserReviews(pageNumber));
+            string userName = _userManager.GetUserName(User);
+            return View(await _service.GetUserReviews(pageNumber, userName));
         }
 
         [Authorize(Roles = "User")]
