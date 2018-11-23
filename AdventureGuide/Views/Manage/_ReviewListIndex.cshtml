@@ -1,0 +1,14 @@
+﻿@model AdventureGuide.Models.Destinations.Review;
+
+<li class="list-group-item list-group-item-action">
+    <!-- TODO: add buttons for deleting or editing review-->
+    <div class="col-md-12 d-flex">
+        <div class="col-md-4">
+            <h4>@Model.Comment</h4>
+        </div>
+
+        <div>
+            <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
+        </div>
+    </div>
+</li>
