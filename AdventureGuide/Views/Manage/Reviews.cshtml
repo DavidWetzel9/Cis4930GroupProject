@@ -1,4 +1,6 @@
-﻿
+﻿@model AdventureGuide.ViewModels.ReviewViewModel
+@using AdventureGuide.Models.Destinations;
+
 @{
     ViewData["Title"] = "Reviews";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,3 +8,28 @@
 
 <h2>Reviews</h2>
 
+<div>
+    @if (Model.Reviews.Any())
+    {
+        @foreach (Review review in Model.Reviews)
+        {
+            <partial name="_ReviewListIndex" model="review" />
+        }
+    }
+</div>
+
+@{
+    var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

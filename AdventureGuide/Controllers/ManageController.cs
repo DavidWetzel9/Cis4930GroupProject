@@ -3,6 +3,7 @@ using AdventureGuide.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AdventureGuide.Controllers
 {
@@ -19,9 +20,9 @@ namespace AdventureGuide.Controllers
         }
 
         
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -40,17 +41,16 @@ namespace AdventureGuide.Controllers
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public ActionResult Reviews()
+        public async Task<ActionResult> Reviews(int? pageNumber)
         {
-            return View();
+            string userName = _userManager.GetUserName(User);
+            return View(await _service.GetUserReviews(pageNumber, userName));
         }
 
         [Authorize(Roles = "User")]
         public ActionResult Delete()
         {
-            return View();
-        }
-
-        
+            return RedirectToAction("Index", "Home");
+        } 
     }
 }
