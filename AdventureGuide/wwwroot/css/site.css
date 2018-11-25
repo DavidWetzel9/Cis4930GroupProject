@@ -1,3 +1,26 @@
 ﻿.ui-autocomplete {
     z-index: 1100;
 }
+
+.wrap-map {
+    height: 500px;
+    width: 500px;
+}
+
+    .wrap-map .destination-map {
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+
+        .wrap-map .destination-map .leaflet-bottom.leaflet-right {
+            display: none;
+        }
+
+.flex-item {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.border-none {
+    border: none;
+}
