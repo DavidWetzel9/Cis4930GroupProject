@@ -36,8 +36,7 @@
         <div class="text-center">
             <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" />
             <form>
-                <!-- TODO: implement route to view more photos-->
-                <button class="btn btn-primary mt-2" type="submit">
+                <button class="btn btn-primary mt-2" type="button" data-toggle="modal" data-target="#PhotosModal">
                     View more photos
                 </button>
             </form>
@@ -80,8 +79,42 @@
             <partial name="_ReviewDetails" model="Model.Reviews" />
         </div>
     </div>
+</div>
 
-    <script type="text/javascript">
+<!-- View Photos Modal -->
+<div class="modal fade" id="PhotosModal" tabindex="-1" role="dialog" aria-labelledby="PhotosModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="photosModalLabel">Photos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (Model.ImagePaths.Any())
+                {
+                    @foreach (ImagePath imagePath in Model.ImagePaths)
+                    {
+                        if (imagePath.Path != "/images/defaultDestinationImage.png")
+                        {
+                            <partial name="_PhotoGrid" model="imagePath" />
+                        }
+                        else
+                        {
+                            <div> There are no images for this destination!</div>
+                        }
+                    }
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
 
     function SubmitReview(id)
     {
@@ -99,14 +132,13 @@
             }
         })
     }
-    </script>
-    <!--
-    <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
-    <script src="~/lib/leaflet/dist/leaflet.js"></script>
-    <script src="~/js/MapHelper.js"></script>
+</script>
+<!--
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
 
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
-    </script>
-        -->
-</div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
+</script>
+    -->
