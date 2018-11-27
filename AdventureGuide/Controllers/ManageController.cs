@@ -1,4 +1,5 @@
 ﻿using AdventureGuide.Models;
+using AdventureGuide.Models.Destinations;
 using AdventureGuide.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +52,23 @@ namespace AdventureGuide.Controllers
         public ActionResult Delete()
         {
             return RedirectToAction("Index", "Home");
-        } 
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> EditReview(int id)
+        {
+            return View( await _service.GetReview(id) );
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        public ActionResult EditReview(Review review)
+        {
+            _service.EditReview(review);
+            return RedirectToAction("Reviews", new { pageNumber = 1 });
+            //_service.EditReview(review);
+            //return RedirectToAction("Reviews", await _service.EditReview(review));
+        }
     }
 }

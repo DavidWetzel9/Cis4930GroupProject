@@ -29,5 +29,17 @@ namespace AdventureGuide.Services
             }
             return viewModel;
         }
+
+        public async Task<Review> GetReview(int id)
+        {
+            Review review = await _context.Review.Where(s => s.Id == id).FirstAsync();
+            return review;
+        }
+
+        public async void EditReview(Review review)
+        {
+            _context.Review.Add(review);
+            _context.SaveChanges();
+        }
     }
 }
