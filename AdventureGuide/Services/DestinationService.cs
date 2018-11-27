@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AdventureGuide.Services
 {
@@ -31,6 +32,9 @@ namespace AdventureGuide.Services
             Destination destination = await _context.Destination.FindAsync(id);
             destination.Keywords = await _context.Keyword.Where(i => i.DestinationId == destination.Id).ToListAsync();
             destination.Reviews = await _context.Review.Where(i => i.DestinationId == destination.Id).ToListAsync();
+
+            await GetImagePaths(destination);
+
             return destination;
         }
 
@@ -60,6 +64,8 @@ namespace AdventureGuide.Services
             viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
             foreach(Destination destination in await _context.Destination.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize).ToListAsync())
             {
+                await GetImagePaths(destination);
+
                 viewModel.Destinations.Add(destination);
             }
             return viewModel;
@@ -81,6 +87,8 @@ namespace AdventureGuide.Services
                 }
                 foreach(Destination destination in destinations.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
                 {
+                    await GetImagePaths(destination);
+
                     viewModel.Destinations.Add(destination);
                 }
             }
@@ -91,10 +99,31 @@ namespace AdventureGuide.Services
                 viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
                 foreach (Destination destination in destinationList.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
                 {
+                    await GetImagePaths(destination);
+
                     viewModel.Destinations.Add(destination);
                 }
             }
             return viewModel;
+        }
+
+        private async Task GetImagePaths(Destination destination)
+        {
+            destination.ImagePaths = await _context.ImagePath.Where(i => i.DestinationId == destination.Id).ToListAsync();
+
+            if (!destination.ImagePaths.Any())  // check if destination has image associated with it, if not, use placeholder image
+            {
+                String defaultDestinationImagePath = "/images/defaultDestinationImage.png";
+
+                ImagePath defaultImage = new ImagePath
+                {
+                    DestinationId = destination.Id,
+                    Id = 0,
+                    Path = defaultDestinationImagePath
+                };
+
+                destination.ImagePaths.Add(defaultImage);
+            }
         }
     }
 }
