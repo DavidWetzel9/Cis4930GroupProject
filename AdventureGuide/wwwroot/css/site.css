@@ -24,3 +24,7 @@
 .border-none {
     border: none;
 }
+
+body {
+    background-image: url("/images/homepage_background_repeat.jpg");
+}
