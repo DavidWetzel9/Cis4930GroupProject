@@ -3,9 +3,9 @@
 <li class="list-group-item list-group-item-action" style="min-width:800px;" onclick="window.location='@Url.Action("Details", new { destinationId = Model.Id })'">
     <div class="d-flex justify-content-start">
         <div>
-            <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:128px;max-height:128px" />
+            <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:128px;max-height:128px" alt="Destination icon"/>
         </div>
-        <div>
+        <div style="width:100%">
             <div class="ml-2">
                 <div class="d-flex justify-content-between">
                     <h2 class="text-truncate mt-1">@Model.Name</h2>
@@ -14,6 +14,5 @@
                 @Model.Description
             </div>
         </div>
-
     </div>
 </li>
