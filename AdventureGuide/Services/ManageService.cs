@@ -36,9 +36,11 @@ namespace AdventureGuide.Services
             return review;
         }
 
-        public async void EditReview(Review review)
+        public void EditReview(Review review)
         {
-            _context.Review.Add(review);
+            Review r = _context.Review.Where(s => s.Id == review.Id).First();
+            r.Comment = review.Comment;
+            r.Rating = review.Rating;
             _context.SaveChanges();
         }
     }

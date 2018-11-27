@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AdventureGuide.Controllers
 {
-    
+
     public class ManageController : Controller
     {
         private readonly ManageService _service;
@@ -20,7 +20,7 @@ namespace AdventureGuide.Controllers
             _userManager = userManager;
         }
 
-        
+
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Home");
@@ -58,10 +58,9 @@ namespace AdventureGuide.Controllers
         [Authorize(Roles = "User")]
         public async Task<ActionResult> EditReview(int id)
         {
-            return View( await _service.GetReview(id) );
+            return View(await _service.GetReview(id));
         }
 
-        [HttpPost]
         [Authorize(Roles = "User")]
         public ActionResult EditReview(Review review)
         {
