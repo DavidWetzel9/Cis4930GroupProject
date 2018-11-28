@@ -4,6 +4,7 @@ using AdventureGuide.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace AdventureGuide.Controllers
@@ -38,6 +39,13 @@ namespace AdventureGuide.Controllers
         public ActionResult Users()
         {
             return View();
+        }
+
+        public ActionResult DeleteAccount()
+        {
+            int userId = Int32.Parse(_userManager.GetUserId(User));
+            _service.DeleteAccount(userId);
+            return View("/");
         }
 
         [HttpGet]

@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
 using System.Collections.Generic;
+using System;
 
 namespace AdventureGuide.Services
 {
@@ -15,6 +16,13 @@ namespace AdventureGuide.Services
         public ManageService(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        //TODO: Complete deleting account
+        public void DeleteAccount(int id)
+        {
+            var userRolesList = _context.UserRoles.Where(s => Int32.Parse(s.UserId) == id);
+            var user = _context.Users.Where(s => Int32.Parse(s.Id) == id);
         }
 
         public async Task<ReviewViewModel> GetUserReviews(int? pageNumber, string userName)
