@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">AdventureGuide</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,7 +31,6 @@
             <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Destination" asp-action="Index">Destinations</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Destination" asp-action="Create">Create</a></li>
             </ul>
@@ -39,9 +38,7 @@
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
-
-    <div class="container body-content">
+    <div>
         @RenderBody()
         <hr />
         <footer>
