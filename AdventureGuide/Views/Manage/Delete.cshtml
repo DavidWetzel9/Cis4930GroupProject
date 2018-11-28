@@ -6,3 +6,20 @@
 <h2>Account Deleted</h2>
 <p>You have successfully deleted your account.<br>
     We are sorry to see you go!</p>
+
+<button onclick="DeleteAccount()">Delete</button>
+
+<script type="text/javascript">
+    function DeleteAccount()
+    {
+        $.ajax({
+            method: 'DELETE',
+            url: "@Url.Action("DeleteAccount", "Manage")",
+            timeout: 60000,
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                location.href = "@Url.Action("Index", "Home")";
+            }
+        })
+    }
+</script>
