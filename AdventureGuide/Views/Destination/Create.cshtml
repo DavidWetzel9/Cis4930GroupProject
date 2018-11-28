@@ -4,74 +4,77 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="container body-content mt-3">
-    <h3>Create Destination</h3>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="CreateDestination">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="State" class="control-label"></label>
-                    <input asp-for="State" class="form-control" />
-                    <span asp-validation-for="State" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Country" class="control-label"></label>
-                    <input asp-for="Country" class="form-control" />
-                    <span asp-validation-for="Country" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Zip" class="control-label"></label>
-                    <input asp-for="Zip" class="form-control" />
-                    <span asp-validation-for="Zip" class="text-danger"></span>
-                </div>
+<div class="bg-img">
 
-                <div class="form-group">
-                    <label asp-for="Keywords" class="control-label"></label>
-                    <div id="KeywordForm">
-                        @for (int i = 0; i < Model.Keywords.Count; i++)
-                        {
-                            Keyword keyword = Model.Keywords[i];
-                            string name = $"Keywords[{i}].KeywordString";
-
-                        }
-                    </div>
-                </div>
-                <button class="btn btn-success" onclick="openKeywordModal()"> Add Keywords </button>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" asp-action="CreateDestination" />
-                </div>
-            </form>
+    <form asp-action="CreateDestination" class="container2">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <h2>Create Destination</h2>
+        <div>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Country" class="control-label"></label>
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Zip" class="control-label"></label>
+            <input asp-for="Zip" class="form-control" />
+            <span asp-validation-for="Zip" class="text-danger"></span>
         </div>
 
-    </div>
+        <div>
+            <label asp-for="Keywords" class="control-label"></label>
+            <div id="KeywordForm">
+                @for (int i = 0; i < Model.Keywords.Count; i++)
+                {
+                    Keyword keyword = Model.Keywords[i];
+                    string name = $"Keywords[{i}].KeywordString";
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+                }
+            </div>
 
-    <partial name="_CreateKeyword" model="Model.Keywords" />
+
+            <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
+            <br /><br />
+            <div>
+                <input type="submit" value="Submit" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
+            </div>
+
+            <div>
+                <a asp-action="Index" class="alignRight">Back to List</a>
+            </div>
+    </form>
+
+
+</div>
+
+
+
+
+<partial name="_CreateKeyword" model="Model.Keywords" />
 </div>
 <script>
     function openKeywordModal(e) {
