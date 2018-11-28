@@ -24,8 +24,37 @@
 .border-none {
     border: none;
 }
+.border-class {
+    border: thin black solid;
+    margin: 20px;
+    padding: 20px;
+}
 
 #homepage {
     background-image: url("/images/homepage_background_repeat.jpg");
 }
+.bg-img {
+    /* The image used */
+    background-image: url("/images/create_page_image.jpg");
+    min-height: 95%;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+
+/* Add styles to the form container */
+.container2 {
+    position: center;
+    right: 50%;
+    margin: 20px;
+    max-width: 50%;
+    max-height: 80%;
+    padding: 30px;
+    background-color: peachpuff;
+}
+
+
 
