@@ -29,3 +29,10 @@
     background-image: url("/images/homepage_background_repeat.jpg");
 }
 
+.my-star .caption {
+    display: none;
+}
+
+.my-star .clear-rating {
+    display: none;
+}
