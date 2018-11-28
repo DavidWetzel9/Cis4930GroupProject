@@ -14,11 +14,13 @@ namespace AdventureGuide.Controllers
     {
         private readonly ManageService _service;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public ManageController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public ManageController(ApplicationDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _service = new ManageService(context);
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
 
@@ -41,12 +43,25 @@ namespace AdventureGuide.Controllers
             return View();
         }
 
-        public ActionResult DeleteAccount()
+        [Authorize(Roles = "User")]
+        public ActionResult Delete()
         {
-            int userId = Int32.Parse(_userManager.GetUserId(User));
-            _service.DeleteAccount(userId);
-            return View("/");
+            return View();
         }
+
+        [HttpDelete]
+        [Authorize(Roles = "User")]
+        public async void DeleteAccount()
+        {
+            string userName = _userManager.GetUserName(User);
+            string userId = _userManager.GetUserId(User);
+
+            await _signInManager.SignOutAsync();
+
+            _service.DeleteAccount(userId, userName);
+        }
+
+
 
         [HttpGet]
         [Authorize(Roles = "User")]
