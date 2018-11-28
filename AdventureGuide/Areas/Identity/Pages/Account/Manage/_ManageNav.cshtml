@@ -15,7 +15,7 @@
         else if (User.IsInRole("User"))
         {
             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Reviews"> Manage my Reviews </a></li>
-            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Delete"> Delete my Account </a></li>
+            <li class="nav-item"><a class="btn btn-danger mt-1" asp-area="" asp-controller="Manage" asp-action="DeleteAccount"> Delete my Account </a></li>
         }
 
     }
