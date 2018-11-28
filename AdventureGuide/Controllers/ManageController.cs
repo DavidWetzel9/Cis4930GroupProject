@@ -1,13 +1,15 @@
 ﻿using AdventureGuide.Models;
+using AdventureGuide.Models.Destinations;
 using AdventureGuide.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace AdventureGuide.Controllers
 {
-    
+
     public class ManageController : Controller
     {
         private readonly ManageService _service;
@@ -19,7 +21,7 @@ namespace AdventureGuide.Controllers
             _userManager = userManager;
         }
 
-        
+
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Home");
@@ -39,6 +41,13 @@ namespace AdventureGuide.Controllers
             return View();
         }
 
+        public ActionResult DeleteAccount()
+        {
+            int userId = Int32.Parse(_userManager.GetUserId(User));
+            _service.DeleteAccount(userId);
+            return View("/");
+        }
+
         [HttpGet]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> Reviews(int? pageNumber)
@@ -48,9 +57,24 @@ namespace AdventureGuide.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public ActionResult Delete()
+        public ActionResult DeleteReview(int id)
         {
-            return RedirectToAction("Index", "Home");
-        } 
+            _service.DeleteReview(id);
+            return RedirectToAction("Reviews");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> EditReview(int id)
+        {
+            return View(await _service.GetReview(id));
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult EditReview(Review review)
+        {
+            _service.EditReview(review);
+            return RedirectToAction("Reviews", new { pageNumber = 1 });
+        }
     }
 }

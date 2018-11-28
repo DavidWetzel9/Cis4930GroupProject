@@ -23,12 +23,12 @@
     var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
+<a asp-action="Reviews"
    asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
-<a asp-action="Index"
+<a asp-action="Reviews"
    asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
    class="btn btn-default @nextDisabled">
     Next
