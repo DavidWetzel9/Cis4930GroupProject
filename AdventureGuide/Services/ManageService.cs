@@ -19,12 +19,24 @@ namespace AdventureGuide.Services
         }
 
         //TODO: Complete deleting account
-        public void DeleteAccount(string userName)
+        public void DeleteAccount(string id, string userName)
         {
+            var userRolesList = _context.UserRoles.Where(s => s.UserId == id).ToList();
+            foreach(Microsoft.AspNetCore.Identity.IdentityUserRole<string> role in userRolesList)
+            {
+                _context.UserRoles.Remove(role);
+            }
+            var user = _context.Users.Where(s => s.Id == id);
+
             var reviewList = _context.Review.Where(s => s.Username == userName).ToList();
             foreach(Review r in reviewList)
             {
                 _context.Review.Remove(r);
+            }
+
+            foreach(Microsoft.AspNetCore.Identity.IdentityUser u in user)
+            {
+                _context.Users.Remove(u);
             }
             _context.SaveChanges();
         }
