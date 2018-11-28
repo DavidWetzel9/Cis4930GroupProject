@@ -19,10 +19,14 @@ namespace AdventureGuide.Services
         }
 
         //TODO: Complete deleting account
-        public void DeleteAccount(int id)
+        public void DeleteAccount(string userName)
         {
-            var userRolesList = _context.UserRoles.Where(s => Int32.Parse(s.UserId) == id);
-            var user = _context.Users.Where(s => Int32.Parse(s.Id) == id);
+            var reviewList = _context.Review.Where(s => s.Username == userName).ToList();
+            foreach(Review r in reviewList)
+            {
+                _context.Review.Remove(r);
+            }
+            _context.SaveChanges();
         }
 
         public async Task<ReviewViewModel> GetUserReviews(int? pageNumber, string userName)
