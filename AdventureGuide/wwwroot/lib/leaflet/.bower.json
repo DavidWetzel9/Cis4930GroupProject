@@ -1,0 +1,30 @@
+{
+  "name": "leaflet",
+  "description": "JavaScript library for mobile-friendly interactive maps",
+  "license": "BSD-2-Clause",
+  "main": [
+    "dist/leaflet.css",
+    "dist/leaflet-src.js"
+  ],
+  "ignore": [
+    ".*",
+    "CHANGELOG.json",
+    "FAQ.md",
+    "debug",
+    "spec",
+    "src",
+    "build"
+  ],
+  "homepage": "https://github.com/Leaflet/Leaflet",
+  "version": "1.3.4",
+  "_release": "1.3.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.3.4",
+    "commit": "0e566b2ad5e696ba9f79a9d48a7e51c8f4892441"
+  },
+  "_source": "https://github.com/Leaflet/Leaflet.git",
+  "_target": "v1.3.4",
+  "_originalSource": "leaflet",
+  "_direct": true
+}

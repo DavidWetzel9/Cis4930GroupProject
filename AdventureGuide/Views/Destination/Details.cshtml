@@ -8,49 +8,38 @@
 <div class="mt-1">
     <h3>Destination Details</h3>
     <hr />
+    <div>
+        <div>
+            <span>@Model.Name</span>
+        </div>
+        <div>
+            <span>@Model.Description</span>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <span>@Model.Address</span>
+            <input type="hidden" id="Address" value="@Model.Address" />
+        </div>
+        <div>
+            <span>@Model.City</span>
+            <input type="hidden" id="City" value="@Model.City" />
+        </div>
+        <div>
+            <span>@Model.State</span>
+            <input type="hidden" id="State" value="@Model.State" />
+        </div>
+        <div>
+            <span>@Model.Zip</span>
+            <input type="hidden" id="Zip" value="@Model.Zip" />
+        </div>
+        <div>
+            <span>@Model.Country</span>
+            <input type="hidden" id="Country" value="@Model.Country" />
+        </div>
+    </div>
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.State)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Zip)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Zip)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Latitude)
         </dt>
@@ -75,6 +64,15 @@
 
     </dl>
 </div>
+
+<div class="col-sm-12 p-05">
+    <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
+        <div class="card-body wrap-map flex-item">
+            <div class="destination-map" id="map"></div>
+        </div>
+    </div>
+</div>
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
@@ -120,3 +118,10 @@ else
     }
 </script>
 
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
+</script>

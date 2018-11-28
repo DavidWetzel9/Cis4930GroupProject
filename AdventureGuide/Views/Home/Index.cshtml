@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+<body id="homepage">
 <script>
     // add shadow to card when hovering over it
     $(document).ready(function () {
@@ -21,7 +22,7 @@
     <div class="input-group">
         <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" />
         <span class="input-group-append">
-            <button class="btn btn-outline-primary border-left-0 border" type="submit">
+            <button class="btn btn-outline-primary border-left-0 border" type="submit" value="Go">
                 <i class="fa fa-search"></i>
             </button>
         </span>
@@ -37,7 +38,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Hotel" method="get" >
+            <a asp-controller="Destination" asp-action="Index" asp-route-currentFilter="Hotel" method="get">
                 <div class="card bg-dark text-white">
                     <img class="card-img" src="~/images/card_image_hotel.jpg" alt="Card image">
                     <div class="card-img-bottom align-items-center d-flex justify-content-center">
@@ -101,3 +102,4 @@
         </div>
     </div>
 </div>
+</body>

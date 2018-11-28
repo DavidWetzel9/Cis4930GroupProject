@@ -13,14 +13,14 @@
         if (searchString != "" && searchString != null) {
             $("#resultsTitle").html("Results for \"" + searchString + "\"");
         } else {
-            $("#resultsTitle").html("All destinations");
+            $("#resultsTitle").html("All Destinations");
         }
     });
 </script>
 
 <form asp-action="Index" method="get" class="d-flex justify-content-center row my-3">
     <div class="input-group">
-        <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+        <input class="form-control border-right-0 border" placeholder="Search Destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
         <span class="input-group-append">
             <button class="btn btn-outline-primary border-left-0 border" type="submit">
                 <i class="fa fa-search"></i>
