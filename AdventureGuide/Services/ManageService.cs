@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
+using System.Collections.Generic;
 
 namespace AdventureGuide.Services
 {
@@ -41,6 +42,13 @@ namespace AdventureGuide.Services
             Review r = _context.Review.Where(s => s.Id == review.Id).First();
             r.Comment = review.Comment;
             r.Rating = review.Rating;
+            _context.SaveChanges();
+        }
+
+        public void DeleteReview(int id)
+        {
+            Review review = _context.Review.Where(s => s.Id == id).First();
+            _context.Review.Remove(review);
             _context.SaveChanges();
         }
     }

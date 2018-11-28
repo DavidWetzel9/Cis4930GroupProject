@@ -49,9 +49,10 @@ namespace AdventureGuide.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public ActionResult Delete()
+        public ActionResult DeleteReview(int id)
         {
-            return RedirectToAction("Index", "Home");
+            _service.DeleteReview(id);
+            return RedirectToAction("Reviews");
         }
 
         [HttpGet]
@@ -66,8 +67,6 @@ namespace AdventureGuide.Controllers
         {
             _service.EditReview(review);
             return RedirectToAction("Reviews", new { pageNumber = 1 });
-            //_service.EditReview(review);
-            //return RedirectToAction("Reviews", await _service.EditReview(review));
         }
     }
 }
