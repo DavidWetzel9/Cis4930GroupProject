@@ -56,21 +56,9 @@ namespace AdventureGuide.Controllers
             string userName = _userManager.GetUserName(User);
             string userId = _userManager.GetUserId(User);
 
-            //var user = await _userManager.FindByIdAsync(userId);
-            //var userRoles = await _userManager.GetRolesAsync(user);
-
             await _signInManager.SignOutAsync();
 
-            //if (userRoles.Count > 0)
-            //{
-            //    foreach (var role in userRoles)
-            //    {
-            //        await _userManager.RemoveFromRoleAsync(user, role);
-            //    }
-            //}
-
-            //await _userManager.DeleteAsync(user);
-            //_service.DeleteAccount(userName);
+            _service.DeleteAccount(userId, userName);
         }
 
 
