@@ -44,14 +44,36 @@ namespace AdventureGuide.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public async Task<ActionResult> DeleteAccount()
+        public ActionResult Delete()
         {
-            string userId = _userManager.GetUserId(User);
-            string userName = _userManager.GetUserName(User);
-            await _signInManager.SignOutAsync();
-            _service.DeleteAccount(userId, userName);
-            return View("Delete");
+            return View();
         }
+
+        [HttpDelete]
+        [Authorize(Roles = "User")]
+        public async void DeleteAccount()
+        {
+            string userName = _userManager.GetUserName(User);
+            string userId = _userManager.GetUserId(User);
+
+            //var user = await _userManager.FindByIdAsync(userId);
+            //var userRoles = await _userManager.GetRolesAsync(user);
+
+            await _signInManager.SignOutAsync();
+
+            //if (userRoles.Count > 0)
+            //{
+            //    foreach (var role in userRoles)
+            //    {
+            //        await _userManager.RemoveFromRoleAsync(user, role);
+            //    }
+            //}
+
+            //await _userManager.DeleteAsync(user);
+            //_service.DeleteAccount(userName);
+        }
+
+
 
         [HttpGet]
         [Authorize(Roles = "User")]
