@@ -26,7 +26,8 @@
 }
 
 #homepage {
-    background-image: url("/images/homepage_background_repeat.jpg");
+    background-image: url("/images/homepage_background_image.jpg");
+    min-height: 1000px;
 }
 
 .my-star .caption {
@@ -35,4 +36,30 @@
 
 .my-star .clear-rating {
     display: none;
+}
+
+.bg-img {
+    /* The image used */
+    background-image: url("/images/create_page_image.jpg");
+    min-height: 1000px;
+    /* Center and scale the image nicely */
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+
+/* Add styles to the form container */
+.container2 {
+    position: absolute;
+    margin-top: 3%;
+    margin-left: 13%;
+    min-width: 40%;
+    max-height: 100%;
+    padding: 30px;
+    background-color: peachpuff;
+}
+
+.alignRight {
+    float: right;
 }
