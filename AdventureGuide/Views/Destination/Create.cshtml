@@ -58,13 +58,12 @@
         <br /><br />
 
         <div class="form-group">
-            <!--TODO: figure out how to get image from form and pass it to controller, also change file upload text, also (maybe) do multi-file uploads???-->
-            <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
-            <div class="custom-file">
-                <label class="custom-file-label" for="customFile">Add photos</label>
-                <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png, .jpeg, .jpg" multiple>
+            <div class="custom-file" id="fileUploadBox">
+                <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
+                <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
                 <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
             </div>
+            <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
         </div>
 
         <div>
@@ -80,4 +79,34 @@
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+</script>
+
+<script> // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
+    $('input[type="file"]').change(function (queuedFiles) {
+
+        var fileNames = queuedFiles.target.files;
+
+        if (fileNames.length > 0) // set filenames in upload bar if user selected at least 1 or more file(s)
+        {
+            $('#customFileLabel').empty();
+
+            jQuery.each(fileNames, function (index, fileName) {
+                var ext = fileName.name.split('.').pop();
+
+                if (ext != 'jpg' && ext != 'png' && ext != 'jpeg') {
+                    $('#customFileLabel').text("Upload photos");
+                    
+                    return;
+                }
+
+                if (index < fileNames.length - 1) {
+                    $('#customFileLabel').append(fileName.name + ', ');
+                } else {
+                    $('#customFileLabel').append(fileName.name);
+                }
+            });
+        } else {
+            $('#customFileLabel').text("Upload photos");
+        }
+    });
 </script>
