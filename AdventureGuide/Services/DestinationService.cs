@@ -46,6 +46,12 @@ namespace AdventureGuide.Services
             _context.SaveChanges();
         }
 
+        public void CreateImagePath(ImagePath imagePath)
+        {
+            _context.ImagePath.Add(imagePath);
+            _context.SaveChanges();
+        }
+
         public async Task<List<Review>> AddReview(Review review)
         {
             Destination destination = _context.Destination.Where(i => i.Id == review.DestinationId).First();

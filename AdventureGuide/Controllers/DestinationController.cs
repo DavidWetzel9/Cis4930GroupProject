@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace AdventureGuide.Controllers
 {
@@ -15,11 +18,13 @@ namespace AdventureGuide.Controllers
     {
         private readonly DestinationService _service;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public DestinationController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public DestinationController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IHostingEnvironment hostingEnvironment)
         {
             _service = new DestinationService(context);
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
@@ -53,10 +58,16 @@ namespace AdventureGuide.Controllers
             return View(new Destination());
         }
 
-        public ActionResult CreateDestination(Destination destination)
+        public ActionResult CreateDestination(IFormFileCollection pictures, Destination destination)
         {
             destination.UserId = _userManager.GetUserId(User);
             _service.CreateDestination(destination);
+
+            if(pictures.Count > 0)
+            { 
+                UploadPictures(pictures, destination.Id);
+            }
+
             return RedirectToAction("Details", new { destinationId = destination.Id });
         }
 
@@ -67,5 +78,29 @@ namespace AdventureGuide.Controllers
             review.Username = _userManager.GetUserName(User);
             return PartialView("_ReviewDetails", await (_service.AddReview(review)));
         }
+
+        private void UploadPictures(IFormFileCollection pictures, int newDestinationId)
+        {
+            foreach (IFormFile picture in pictures)
+            {
+                // generate unique GUID (globally unique identifier) for file to upload (prevent filename collisions)
+                string pictureName = "/images/destinations/" + newDestinationId.ToString() + "/" + string.Format(@"{0}", Guid.NewGuid()) + Path.GetExtension(picture.FileName);
+                string webRoot = _hostingEnvironment.WebRootPath;
+                string path = pictureName;
+
+                Directory.CreateDirectory(webRoot + "/images/destinations/" + newDestinationId.ToString());
+
+                picture.CopyTo(new FileStream(webRoot + path, FileMode.Create));
+
+                ImagePath imagePath = new ImagePath
+                {
+                    DestinationId = newDestinationId,
+                    Path = path
+                };
+
+                _service.CreateImagePath(imagePath);
+            }
+        }
     }
 }
+ 
