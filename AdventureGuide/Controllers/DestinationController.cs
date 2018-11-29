@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
 
 namespace AdventureGuide.Controllers
 {
@@ -81,24 +82,33 @@ namespace AdventureGuide.Controllers
 
         private void UploadPictures(IFormFileCollection pictures, int newDestinationId)
         {
+            string[] supportedTypes = { ".jpg", ".jpeg", ".png" };
+
             foreach (IFormFile picture in pictures)
             {
-                // generate unique GUID (globally unique identifier) for file to upload (prevent filename collisions)
-                string pictureName = "/images/destinations/" + newDestinationId.ToString() + "/" + string.Format(@"{0}", Guid.NewGuid()) + Path.GetExtension(picture.FileName);
-                string webRoot = _hostingEnvironment.WebRootPath;
-                string path = pictureName;
+                string fileExtension = Path.GetExtension(picture.FileName);
 
-                Directory.CreateDirectory(webRoot + "/images/destinations/" + newDestinationId.ToString());
-
-                picture.CopyTo(new FileStream(webRoot + path, FileMode.Create));
-
-                ImagePath imagePath = new ImagePath
+                if(supportedTypes.Contains(fileExtension))
                 {
-                    DestinationId = newDestinationId,
-                    Path = path
-                };
+                    string imagesDirectoryPath = "/images/destinations";
+                    string webRootPath = _hostingEnvironment.WebRootPath;
 
-                _service.CreateImagePath(imagePath);
+                    // generate unique GUID (globally unique identifier) for file to upload (prevent filename collisions)
+                    string picturePath = string.Format(@"{0}/{1}/{2}{3}", imagesDirectoryPath, newDestinationId.ToString(), Guid.NewGuid(), fileExtension);
+                        
+                    string serverSavePath = string.Format(@"{0}{1}/{2}", webRootPath, imagesDirectoryPath, newDestinationId.ToString());
+                    Directory.CreateDirectory(serverSavePath);
+
+                    picture.CopyTo(new FileStream(webRootPath + picturePath, FileMode.Create));
+
+                    ImagePath imagePathEntry = new ImagePath
+                    {
+                        DestinationId = newDestinationId,
+                        Path = picturePath
+                    };
+
+                    _service.CreateImagePath(imagePathEntry);
+                }
             }
         }
     }

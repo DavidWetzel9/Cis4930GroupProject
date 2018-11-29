@@ -62,8 +62,9 @@
                 <div class="form-group"> <!--TODO: figure out how to get image from form and pass it to controller, also change file upload text, also (maybe) do multi-file uploads???-->
                     <input type="submit" value="Create" class="btn btn-default" asp-action="CreateDestination" />
                     <div class="custom-file">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                        <input type="file" class="custom-file-input" id="customFile" name="pictures">
+                        <label class="custom-file-label" for="customFile">Add photos</label>
+                        <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png, .jpeg, .jpg" multiple>
+                        <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
                     </div>
                 </div>
             </form>
