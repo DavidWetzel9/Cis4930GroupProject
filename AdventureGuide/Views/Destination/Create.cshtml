@@ -4,9 +4,9 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="bg-img">
 
-    <form asp-action="CreateDestination" class="container2">
+<div class="bg-img">
+    <form asp-action="CreateDestination" class="container2" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <h2>Create Destination</h2>
         <div>
@@ -44,41 +44,69 @@
             <input asp-for="Zip" class="form-control" />
             <span asp-validation-for="Zip" class="text-danger"></span>
         </div>
+        <label asp-for="Keywords" class="control-label"></label>
+        <div id="KeywordForm">
+            @for (int i = 0; i < Model.Keywords.Count; i++)
+            {
+                Keyword keyword = Model.Keywords[i];
+                string name = $"Keywords[{i}].KeywordString";
+
+            }
+        </div>
+
+        <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
+        <br /><br />
+
+        <div class="form-group">
+            <div class="custom-file" id="fileUploadBox">
+                <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
+                <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
+                <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
+            </div>
+            <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
+        </div>
 
         <div>
-            <label asp-for="Keywords" class="control-label"></label>
-            <div id="KeywordForm">
-                @for (int i = 0; i < Model.Keywords.Count; i++)
-                {
-                    Keyword keyword = Model.Keywords[i];
-                    string name = $"Keywords[{i}].KeywordString";
-
-                }
-            </div>
-
-
-            <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
-            <br /><br />
-            <div>
-                <input type="submit" value="Submit" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
-            </div>
-
-            <div>
-                <a asp-action="Index" class="alignRight">Back to List</a>
-            </div>
+            <a asp-action="Index" class="alignRight">Back to List</a>
+        </div>
     </form>
-
-
 </div>
-
-
-
 
 <partial name="_CreateKeyword" model="Model.Keywords" />
-</div>
+
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+</script>
+
+<script> // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
+    $('input[type="file"]').change(function (queuedFiles) {
+
+        var fileNames = queuedFiles.target.files;
+
+        if (fileNames.length > 0) // set filenames in upload bar if user selected at least 1 or more file(s)
+        {
+            $('#customFileLabel').empty();
+
+            jQuery.each(fileNames, function (index, fileName) {
+                var ext = fileName.name.split('.').pop();
+
+                if (ext != 'jpg' && ext != 'png' && ext != 'jpeg') {
+                    $('#customFileLabel').text("Upload photos");
+                    
+                    return;
+                }
+
+                if (index < fileNames.length - 1) {
+                    $('#customFileLabel').append(fileName.name + ', ');
+                } else {
+                    $('#customFileLabel').append(fileName.name);
+                }
+            });
+        } else {
+            $('#customFileLabel').text("Upload photos");
+        }
+    });
 </script>
