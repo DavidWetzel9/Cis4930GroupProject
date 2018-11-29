@@ -4,80 +4,77 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="container body-content mt-3">
-    <h3>Create Destination</h3>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="CreateDestination" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="State" class="control-label"></label>
-                    <input asp-for="State" class="form-control" />
-                    <span asp-validation-for="State" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Country" class="control-label"></label>
-                    <input asp-for="Country" class="form-control" />
-                    <span asp-validation-for="Country" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Zip" class="control-label"></label>
-                    <input asp-for="Zip" class="form-control" />
-                    <span asp-validation-for="Zip" class="text-danger"></span>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Keywords" class="control-label"></label>
-                    <div id="KeywordForm">
-                        @for (int i = 0; i < Model.Keywords.Count; i++)
-                        {
-                            Keyword keyword = Model.Keywords[i];
-                            string name = $"Keywords[{i}].KeywordString";
+<div class="bg-img">
+    <form asp-action="CreateDestination" class="container2" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <h2>Create Destination</h2>
+        <div>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Country" class="control-label"></label>
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Zip" class="control-label"></label>
+            <input asp-for="Zip" class="form-control" />
+            <span asp-validation-for="Zip" class="text-danger"></span>
+        </div>
+        <label asp-for="Keywords" class="control-label"></label>
+        <div id="KeywordForm">
+            @for (int i = 0; i < Model.Keywords.Count; i++)
+            {
+                Keyword keyword = Model.Keywords[i];
+                string name = $"Keywords[{i}].KeywordString";
 
-                        }
-                    </div>
-                </div>
-                <button class="btn btn-success" onclick="openKeywordModal()"> Add Keywords </button>
-                <div class="form-group"> <!--TODO: figure out how to get image from form and pass it to controller, also change file upload text, also (maybe) do multi-file uploads???-->
-                    <input type="submit" value="Create" class="btn btn-default" asp-action="CreateDestination" />
-                    <div class="custom-file">
-                        <label class="custom-file-label" for="customFile">Add photos</label>
-                        <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png, .jpeg, .jpg" multiple>
-                        <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
-                    </div>
-                </div>
-            </form>
+            }
         </div>
 
-    </div>
+        <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
+        <br /><br />
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+        <div class="form-group">
+            <!--TODO: figure out how to get image from form and pass it to controller, also change file upload text, also (maybe) do multi-file uploads???-->
+            <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
+            <div class="custom-file">
+                <label class="custom-file-label" for="customFile">Add photos</label>
+                <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png, .jpeg, .jpg" multiple>
+                <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
+            </div>
+        </div>
 
-    <partial name="_CreateKeyword" model="Model.Keywords" />
+        <div>
+            <a asp-action="Index" class="alignRight">Back to List</a>
+        </div>
+    </form>
 </div>
+
+<partial name="_CreateKeyword" model="Model.Keywords" />
+
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
