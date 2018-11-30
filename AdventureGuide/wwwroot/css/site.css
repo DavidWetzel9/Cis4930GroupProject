@@ -60,6 +60,17 @@
     background-color: peachpuff;
 }
 
-.alignRight {
-    float: right;
+input[class="form-control error"] {
+    border: 1px solid red !important;
+    box-shadow: 0 0 10px red;
+    outline: none !important;
+}
+
+label[class="error"] {
+    color: red;
+    display: block;
+    font-size: medium;
+    font-weight: normal;
+    margin-bottom: 0;
+    line-height: 1;
 }

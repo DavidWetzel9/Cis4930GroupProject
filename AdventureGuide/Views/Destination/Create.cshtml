@@ -6,43 +6,40 @@
 }
 
 <div class="bg-img">
-    <form asp-action="CreateDestination" class="container2" enctype="multipart/form-data">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="CreateDestination" class="container2" id="CreateForm" enctype="multipart/form-data">
+
         <h2>Create Destination</h2>
         <div>
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <input asp-for="Name" class="form-control" required />
         </div>
         <div>
             <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <input asp-for="Description" class="form-control" required />
         </div>
         <div>
             <label asp-for="Address" class="control-label"></label>
-            <input asp-for="Address" class="form-control" />
-            <span asp-validation-for="Address" class="text-danger"></span>
+            <input asp-for="Address" class="form-control" id="Address" required />
         </div>
-        <div class="form-group">
+        <div>
             <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" />
-            <span asp-validation-for="City" class="text-danger"></span>
+            <input asp-for="City" class="form-control" id="City" required />
         </div>
         <div>
             <label asp-for="State" class="control-label"></label>
-            <input asp-for="State" class="form-control" />
-            <span asp-validation-for="State" class="text-danger"></span>
+            <input asp-for="State" class="form-control" id="State" required />
         </div>
         <div>
             <label asp-for="Country" class="control-label"></label>
-            <input asp-for="Country" class="form-control" />
-            <span asp-validation-for="Country" class="text-danger"></span>
+            <input asp-for="Country" class="form-control" id="Country" required />
         </div>
         <div>
             <label asp-for="Zip" class="control-label"></label>
-            <input asp-for="Zip" class="form-control" />
-            <span asp-validation-for="Zip" class="text-danger"></span>
+            <input asp-for="Zip" class="form-control" required />
+        </div>
+        <div>
+            <input asp-for="Latitude" type="hidden" id="Lat" />
+            <input asp-for="Longitude" type="hidden" id="Lon" />
         </div>
         <label asp-for="Keywords" class="control-label"></label>
         <div id="KeywordForm">
@@ -56,7 +53,6 @@
 
         <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
         <br /><br />
-
         <div class="form-group">
             <div class="custom-file" id="fileUploadBox">
                 <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
@@ -65,22 +61,59 @@
             </div>
             <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
         </div>
-
+        <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Submit</button>  
         <div>
-            <a asp-action="Index" class="alignRight">Back to List</a>
+            <a asp-action="Index" class="float-right">Back to List</a>
         </div>
     </form>
 </div>
 
 <partial name="_CreateKeyword" model="Model.Keywords" />
-
+<partial name="_InvalidAddress" />
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+    function openInvalidModal(e) {
+        $("#invalid-address-window").modal({ 'show': true });
+    }
+    function SubmitForm() {
+        $("#CreateForm").submit();
+    }
+    function ValidateModel() {
+        event.preventDefault();
+        if (!$("#CreateForm").valid()) {
+            return false;
+        }
+        ValidateAddress();
+    }
+
+    async function ValidateAddress() {
+        geocoder = new google.maps.Geocoder();
+        var country = $("#Country").val();
+        var state = $("#State").val();
+        var city = $("#City").val();
+        var address = $("#Address").val();
+        var fullAddress = country + "," + state + "," + city + "," + address;
+        return geocoder.geocode({ 'address': fullAddress }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                $("#Lat").val(results[0].geometry.location.lat());
+                $("#Lon").val(results[0].geometry.location.lng());
+                SubmitForm();
+            }
+            else {
+                openInvalidModal();
+            }
+        });
+
+    }
+    function InitMap() { }
 </script>
 
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
+  </script>
 <script> // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
     $('input[type="file"]').change(function (queuedFiles) {
 

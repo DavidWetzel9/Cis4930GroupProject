@@ -52,6 +52,23 @@
 
     <a asp-action="Index" method="get" class="btn btn-default">Show all destinations</a>
 </div>
+
+<div class="col-sm-12 p-05">
+    <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
+        <div class="card-body wrap-map flex-item">
+            <div class="destination-map" id="map"></div>
+        </div>
+    </div>
+</div>
+
+@foreach (Destination destination in Model.Destinations)
+{
+    <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
+    <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
+}
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
 <script>
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
@@ -62,5 +79,11 @@
         } else {
             $("#resultsTitle").html("All Destinations");
         }
+        ShowMap();
     });
 </script>
+
+
+
+
+
