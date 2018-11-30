@@ -59,9 +59,9 @@
                 <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
                 <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
             </div>
-            <input type="submit" value="Create" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
+            <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Create</button>
         </div>
-        <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Submit</button>  
+
         <div>
             <a asp-action="Index" class="float-right">Back to List</a>
         </div>
@@ -113,8 +113,9 @@
 
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
-  </script>
-<script> // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
+</script>
+<script>
+    // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
     $('input[type="file"]').change(function (queuedFiles) {
 
         var fileNames = queuedFiles.target.files;
@@ -128,7 +129,7 @@
 
                 if (ext != 'jpg' && ext != 'png' && ext != 'jpeg') {
                     $('#customFileLabel').text("Upload photos");
-                    
+
                     return;
                 }
 

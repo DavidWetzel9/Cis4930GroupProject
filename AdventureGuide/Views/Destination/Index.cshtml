@@ -18,11 +18,13 @@
         </div>
     </form>
 
-    <p>
-        <h3 id="resultsTitle">Search results</h3>
-    </p>
-
     <div>
+        <h3 id="resultsTitle">Search results</h3>
+        <input type="checkbox" id="CheckBox" onclick="ToggleView()" />
+        <label for="CheckBox">Show results on map</label>
+    </div>
+
+    <div id="ListView">
         @if (Model.Destinations.Any())
         {
             @foreach (Destination destination in Model.Destinations)
@@ -31,6 +33,15 @@
             }
         }
     </div>
+    <div class="d-none" id="MapView">
+        <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
+            <div class="card-body wrap-map flex-item">
+                <div class="destination-map" id="map"></div>
+            </div>
+        </div>
+    </div>
+
+
 
     @{
         var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
@@ -53,14 +64,6 @@
     <a asp-action="Index" method="get" class="btn btn-default">Show all destinations</a>
 </div>
 
-<div class="col-sm-12 p-05">
-    <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
-        <div class="card-body wrap-map flex-item">
-            <div class="destination-map" id="map"></div>
-        </div>
-    </div>
-</div>
-
 @foreach (Destination destination in Model.Destinations)
 {
     <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
@@ -81,6 +84,19 @@
         }
         ShowMap();
     });
+
+    function ToggleView() {
+        if (document.getElementById("CheckBox").checked) {
+            document.getElementById("ListView").classList.add("d-none");
+            document.getElementById("MapView").classList.remove("d-none");
+            ShowMap();
+        }
+        else {
+            document.getElementById("ListView").classList.remove("d-none");
+            document.getElementById("MapView").classList.add("d-none");
+        }
+        
+    }
 </script>
 
 
