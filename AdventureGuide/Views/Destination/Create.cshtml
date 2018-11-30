@@ -14,31 +14,31 @@
         </div>
         <div>
             <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" required/>
+            <input asp-for="Description" class="form-control" required />
         </div>
         <div>
             <label asp-for="Address" class="control-label"></label>
-            <input asp-for="Address" class="form-control" required/>
+            <input asp-for="Address" class="form-control" id="Address" required />
         </div>
         <div>
             <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" required/>
+            <input asp-for="City" class="form-control" id="City" required />
         </div>
         <div>
             <label asp-for="State" class="control-label"></label>
-            <input asp-for="State" class="form-control" required/>
+            <input asp-for="State" class="form-control" id="State" required />
         </div>
         <div>
             <label asp-for="Country" class="control-label"></label>
-            <input asp-for="Country" class="form-control" required/>
+            <input asp-for="Country" class="form-control" id="Country" required />
         </div>
         <div>
             <label asp-for="Zip" class="control-label"></label>
-            <input asp-for="Zip" class="form-control" required/>
+            <input asp-for="Zip" class="form-control" required />
         </div>
         <div>
-            <input asp-for="Latitude" type="hidden" id="Lat"/>
-            <input asp-for="Longitude" type="hidden" id="Lon"/>
+            <input asp-for="Latitude" type="hidden" id="Lat" />
+            <input asp-for="Longitude" type="hidden" id="Lon" />
         </div>
 
         <div>
@@ -55,9 +55,6 @@
 
             <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
             <br /><br />
-            @*<div>
-                <input type="submit" value="Submit" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
-            </div>*@
             <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Submit</button>
             <div>
                 <a asp-action="Index" class="float-right">Back to List</a>
@@ -69,46 +66,49 @@
 </div>
 
 <partial name="_CreateKeyword" model="Model.Keywords" />
+<partial name="_InvalidAddress" />
+
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+    function openInvalidModal(e) {
+        $("#invalid-address-window").modal({ 'show': true });
+    }
+    function SubmitForm() {
+        $("#CreateForm").submit();
+    }
     function ValidateModel() {
         event.preventDefault();
-
         if (!$("#CreateForm").valid()) {
             return false;
         }
-        else {
-            
-            console.log("meow");
-            return false;
-        }
+        ValidateAddress();
     }
 
+    async function ValidateAddress() {
+        geocoder = new google.maps.Geocoder();
+        var country = $("#Country").val();
+        var state = $("#State").val();
+        var city = $("#City").val();
+        var address = $("#Address").val();
+        var fullAddress = country + "," + state + "," + city + "," + address;
+        return geocoder.geocode({ 'address': fullAddress }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                $("#Lat").val(results[0].geometry.location.lat());
+                $("#Lon").val(results[0].geometry.location.lng());
+                SubmitForm();
+            }
+            else {
+                openInvalidModal();
+            }
+        });
 
-    function InitMap() {
-        //geocoder = new google.maps.Geocoder();
-        //var country = $("#Country").val();
-        //var state = $("#State").val();
-        //var city = $("#City").val();
-        //var address = $("#Address").val();
-        //var fullAddress = country + "," + state + "," + city + "," + address;
-        //geocoder.geocode({ 'address': fullAddress }, function (results, status) {
-        //    if (status === google.maps.GeocoderStatus.OK) {
-        //        var lat = results[0].geometry.location.lat();
-        //        var lon = results[0].geometry.location.lng();
-        //        console.log(lat);
-        //        console.log(lon);
-
-        //    } else {
-        //        alert('Geocode was not successful for the following reason: ' + status);
-        //    }
-        //});
     }
-
+    function InitMap() { }
 </script>
+
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
 </script>
