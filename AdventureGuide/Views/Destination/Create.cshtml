@@ -6,43 +6,39 @@
 }
 <div class="bg-img">
 
-    <form asp-action="CreateDestination" class="container2">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="CreateDestination" class="container2" id="CreateForm">
         <h2>Create Destination</h2>
         <div>
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <input asp-for="Name" class="form-control" required />
         </div>
         <div>
             <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <input asp-for="Description" class="form-control" required/>
         </div>
         <div>
             <label asp-for="Address" class="control-label"></label>
-            <input asp-for="Address" class="form-control" />
-            <span asp-validation-for="Address" class="text-danger"></span>
+            <input asp-for="Address" class="form-control" required/>
         </div>
-        <div class="form-group">
+        <div>
             <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" />
-            <span asp-validation-for="City" class="text-danger"></span>
+            <input asp-for="City" class="form-control" required/>
         </div>
         <div>
             <label asp-for="State" class="control-label"></label>
-            <input asp-for="State" class="form-control" />
-            <span asp-validation-for="State" class="text-danger"></span>
+            <input asp-for="State" class="form-control" required/>
         </div>
         <div>
             <label asp-for="Country" class="control-label"></label>
-            <input asp-for="Country" class="form-control" />
-            <span asp-validation-for="Country" class="text-danger"></span>
+            <input asp-for="Country" class="form-control" required/>
         </div>
         <div>
             <label asp-for="Zip" class="control-label"></label>
-            <input asp-for="Zip" class="form-control" />
-            <span asp-validation-for="Zip" class="text-danger"></span>
+            <input asp-for="Zip" class="form-control" required/>
+        </div>
+        <div>
+            <input asp-for="Latitude" type="hidden" id="Lat"/>
+            <input asp-for="Longitude" type="hidden" id="Lon"/>
         </div>
 
         <div>
@@ -59,26 +55,60 @@
 
             <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
             <br /><br />
-            <div>
+            @*<div>
                 <input type="submit" value="Submit" class="btn btn-primary btn-lg" asp-action="CreateDestination" />
-            </div>
-
+            </div>*@
+            <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Submit</button>
             <div>
-                <a asp-action="Index" class="alignRight">Back to List</a>
+                <a asp-action="Index" class="float-right">Back to List</a>
             </div>
+        </div>
     </form>
 
 
 </div>
 
-
-
-
 <partial name="_CreateKeyword" model="Model.Keywords" />
-</div>
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+    function ValidateModel() {
+        event.preventDefault();
+
+        if (!$("#CreateForm").valid()) {
+            return false;
+        }
+        else {
+            
+            console.log("meow");
+            return false;
+        }
+    }
+
+
+    function InitMap() {
+        //geocoder = new google.maps.Geocoder();
+        //var country = $("#Country").val();
+        //var state = $("#State").val();
+        //var city = $("#City").val();
+        //var address = $("#Address").val();
+        //var fullAddress = country + "," + state + "," + city + "," + address;
+        //geocoder.geocode({ 'address': fullAddress }, function (results, status) {
+        //    if (status === google.maps.GeocoderStatus.OK) {
+        //        var lat = results[0].geometry.location.lat();
+        //        var lon = results[0].geometry.location.lng();
+        //        console.log(lat);
+        //        console.log(lon);
+
+        //    } else {
+        //        alert('Geocode was not successful for the following reason: ' + status);
+        //    }
+        //});
+    }
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
 </script>

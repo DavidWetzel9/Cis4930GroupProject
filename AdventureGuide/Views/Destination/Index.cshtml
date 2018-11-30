@@ -66,7 +66,9 @@
     <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
     <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
 }
-
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
 <script>
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
@@ -77,16 +79,11 @@
         } else {
             $("#resultsTitle").html("All Destinations");
         }
+        ShowMap();
     });
 </script>
 
 
-<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
-<script src="~/lib/leaflet/dist/leaflet.js"></script>
-<script src="~/js/MapHelper.js"></script>
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
-</script>
 
 
