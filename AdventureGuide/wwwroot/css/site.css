@@ -25,7 +25,7 @@
     border: none;
 }
 
-#homepage {
+.homepage {
     background-image: url("/images/homepage_background_image.jpg");
     min-height: 1000px;
 }
@@ -73,4 +73,26 @@ label[class="error"] {
     font-weight: normal;
     margin-bottom: 0;
     line-height: 1;
+}
+
+.about_text{
+ margin-left:200px;
+ margin-right:250px;
+ background-color:ghostwhite;
+}
+
+h1{
+    text-align:center;
+   
+}
+
+.destination_background {
+    background-color: lightgreen;
+ 
+    margin:0;
+    padding:0;
+}
+
+.review_background{
+    background-color:mediumpurple;
 }
