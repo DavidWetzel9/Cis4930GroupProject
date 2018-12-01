@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Details";
 }
-<div class="destination-background">
     <div class="container body-content">
         <div class="mt-1">
             <div class="d-flex justify-content-between">
@@ -47,7 +46,6 @@
             </div>
             <hr />
 
-            <div class="review-background">
                 <div class="d-flex justify-content-start">
 
                     <h2>Reviews</h2>
@@ -70,7 +68,7 @@
                 <div id="DestinationComment">
                     <partial name="_ReviewDetails" model="Model.Reviews" />
                 </div>
-            </div>
+           
         </div>
 
         <!-- View Map Modal -->
@@ -133,7 +131,7 @@
             </div>
         </div>
     </div>
-</div>
+
 <script type="text/javascript">
 
     function SubmitReview(id)
