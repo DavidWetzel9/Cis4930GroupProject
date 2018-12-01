@@ -43,8 +43,6 @@
             </div>
         </div>
 
-
-
         @{
             var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
             var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
@@ -70,15 +68,16 @@
 </div>
 
 
-    @foreach (Destination destination in Model.Destinations)
-    {
-        <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
-        <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
-    }
-    <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
-    <script src="~/lib/leaflet/dist/leaflet.js"></script>
-    <script src="~/js/MapHelper.js"></script>
-    <script>
+@foreach (Destination destination in Model.Destinations)
+{
+    <input class="hidden-name" type="hidden" value="@destination.Name" />
+    <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
+    <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
+}
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
+<script>
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
     var prevUrl;
@@ -114,7 +113,7 @@
         $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
         $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
     }
-    </script>
+</script>
 
 
 
