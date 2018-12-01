@@ -57,7 +57,7 @@
     min-width: 40%;
     max-height: 100%;
     padding: 30px;
-    background-color: peachpuff;
+    background-color: lightblue;
 }
 
 input[class="form-control error"] {
@@ -75,7 +75,7 @@ label[class="error"] {
     line-height: 1;
 }
 
-.about_text{
+.about-text{
  margin-left:200px;
  margin-right:250px;
  background-color:ghostwhite;
@@ -86,17 +86,24 @@ h1{
    
 }
 
-.destination_background {
+.destination-background {
     background-color: lightgreen;
- 
+    min-height:1000px;
     margin:0;
     padding:0;
 }
 
-.review_background{
+.review-background{
     background-color:mediumpurple;
 }
 
 .container3{
     background-color:lightblue;
+    padding-right:0;
+    margin:0;
+}
+
+.container4 {
+   padding:4%;
+    background-color: lightblue;
 }
