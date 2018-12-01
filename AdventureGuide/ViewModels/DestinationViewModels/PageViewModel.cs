@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventureGuide.ViewModels
+namespace AdventureGuide.ViewModels.DestinationViewModels
 {
 
     public class PageViewModel

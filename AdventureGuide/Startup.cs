@@ -39,7 +39,7 @@ namespace AdventureGuide
                     .AddRoleManager<RoleManager<IdentityRole>>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, ClaimsPrinciplaFactory>();
+            services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, ClaimsPrincipalFactory>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 
 namespace AdventureGuide.Classes
 {
-    public class ClaimsPrinciplaFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>
+    public class ClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>
     {
-        public ClaimsPrinciplaFactory(UserManager<IdentityUser> userManager,
+        public ClaimsPrincipalFactory(UserManager<IdentityUser> userManager,
                                       RoleManager<IdentityRole> roleManager,
                                       IOptions<IdentityOptions> options)
             :base(userManager, roleManager, options)
