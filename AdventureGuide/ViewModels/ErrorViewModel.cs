@@ -1,4 +1,4 @@
-namespace AdventureGuide.Models
+namespace AdventureGuide.ViewModels
 {
     public class ErrorViewModel
     {

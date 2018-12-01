@@ -1,7 +1,7 @@
 ﻿using AdventureGuide.Models.Destinations;
 using System.Collections.Generic;
 
-namespace AdventureGuide.ViewModels
+namespace AdventureGuide.ViewModels.DestinationViewModels
 {
     public class ReviewViewModel
     {

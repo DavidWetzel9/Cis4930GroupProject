@@ -1,5 +1,5 @@
 ﻿using AdventureGuide.Models;
-using AdventureGuide.ViewModels;
+using AdventureGuide.ViewModels.DestinationViewModels;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
