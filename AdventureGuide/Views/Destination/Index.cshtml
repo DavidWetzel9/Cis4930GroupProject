@@ -73,11 +73,13 @@
     <input class="hidden-name" type="hidden" value="@destination.Name" />
     <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
     <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
+    <input class="hidden-rating" type="hidden" value="@destination.Rating" />
+    <input class="hidden-id" type="hidden" value="@destination.Id" />
 }
 <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
 <script src="~/lib/leaflet/dist/leaflet.js"></script>
 <script src="~/js/MapHelper.js"></script>
-<script>
+<script type="text/javascript">
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
     var prevUrl;
@@ -112,6 +114,15 @@
     function AdjustUrl(value) {
         $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
         $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
+    }
+
+    function InitRating(element) {
+        // reinit star rating
+        var id = $(element).data("string");
+        console.log(document.getElementById(id));
+        console.log($("#" + id));
+        $("#" + id).rating();
+        console.log("meow");
     }
 </script>
 
