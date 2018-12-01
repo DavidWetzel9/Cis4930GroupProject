@@ -17,11 +17,13 @@
             </span>
         </div>
     </form>
-
+    @{ 
+        var check = Model.PageViewModel.IsMapView ? "checked" : "";
+    }
     <div>
         <h3 id="resultsTitle">Search results</h3>
-        <input type="checkbox" id="CheckBox" onclick="ToggleView()" />
-        <label for="CheckBox">Show results on map</label>
+        <input type="checkbox" id="CheckBox" onclick="ToggleView()" @check/>
+        <label for="CheckBox" >Show results on map</label>
     </div>
 
     <div id="ListView">
@@ -51,13 +53,15 @@
     <a asp-action="Index"
        asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @prevDisabled">
+       class="btn btn-default @prevDisabled"
+       id="PrevButton">
         Previous
     </a>
     <a asp-action="Index"
        asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @nextDisabled">
+       class="btn btn-default @nextDisabled"
+       id="NextButton">
         Next
     </a>
 
@@ -75,6 +79,8 @@
 <script>
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
+    var prevUrl;
+    var nextUrl;
     $(document).ready(function () {
         var searchString = "@ViewData["CurrentFilter"]";
         if (searchString != "" && searchString != null) {
@@ -82,20 +88,29 @@
         } else {
             $("#resultsTitle").html("All Destinations");
         }
-        ShowMap();
+        prevUrl = $("#PrevButton").attr("href");
+        nextUrl = $("#NextButton").attr("href");
+        ToggleView();
     });
 
     function ToggleView() {
         if (document.getElementById("CheckBox").checked) {
             document.getElementById("ListView").classList.add("d-none");
             document.getElementById("MapView").classList.remove("d-none");
+            AdjustUrl(true);
             ShowMap();
+
         }
         else {
             document.getElementById("ListView").classList.remove("d-none");
             document.getElementById("MapView").classList.add("d-none");
+            AdjustUrl(false);
         }
-        
+    }
+
+    function AdjustUrl(value) {
+        $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
+        $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
     }
 </script>
 

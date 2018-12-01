@@ -29,7 +29,7 @@ namespace AdventureGuide.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int? pageNumber, string currentFilter, bool? isMapView)
+        public async Task<ActionResult> Index(int? pageNumber, string currentFilter, bool isMapView = false)
         {
             if (!string.IsNullOrEmpty(currentFilter))
                 ViewData["CurrentFilter"] = currentFilter;

@@ -18,11 +18,11 @@ namespace AdventureGuide.Services
             _context = context;
         }
 
-        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString, bool? isMapView)
+        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString, bool isMapView)
         {
             DestinationViewModel viewModel = new DestinationViewModel();
             viewModel.PageViewModel.PageNumber = pageNumber ?? 1;
-            viewModel.PageViewModel.IsMapView = isMapView ?? false;
+            viewModel.PageViewModel.IsMapView = isMapView;
             if (string.IsNullOrEmpty(searchString))
                 return await GetDestinationsDefault(viewModel);
             else
