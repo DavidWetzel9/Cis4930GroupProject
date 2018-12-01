@@ -28,6 +28,8 @@ namespace AdventureGuide.ViewModels
             }
         }
 
+        public bool IsMapView { get; set; }
+
         public bool HasPreviousPage
         {
             get

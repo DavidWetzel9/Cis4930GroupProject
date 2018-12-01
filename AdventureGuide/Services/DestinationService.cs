@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Hosting;
 
 namespace AdventureGuide.Services
 {
@@ -19,12 +18,15 @@ namespace AdventureGuide.Services
             _context = context;
         }
 
-        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString)
+        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString, bool isMapView)
         {
-            if (String.IsNullOrEmpty(searchString))
-                return await GetDestinationsDefault(pageNumber);
+            DestinationViewModel viewModel = new DestinationViewModel();
+            viewModel.PageViewModel.PageNumber = pageNumber ?? 1;
+            viewModel.PageViewModel.IsMapView = isMapView;
+            if (string.IsNullOrEmpty(searchString))
+                return await GetDestinationsDefault(viewModel);
             else
-                return await GetDestinationsBySearch(pageNumber, searchString);
+                return await GetDestinationsBySearch(viewModel, searchString);
         }
 
         public async Task<Destination> GetDestinationDetails(int id)
@@ -63,11 +65,9 @@ namespace AdventureGuide.Services
             return reviews;
         }
 
-        private async Task<DestinationViewModel> GetDestinationsDefault(int? pageNumber)
+        private async Task<DestinationViewModel> GetDestinationsDefault(DestinationViewModel viewModel)
         {
-            DestinationViewModel viewModel = new DestinationViewModel();
             viewModel.PageViewModel.TotalCount = await _context.Destination.CountAsync();
-            viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
             foreach(Destination destination in await _context.Destination.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize).ToListAsync())
             {
                 await GetImagePaths(destination);
@@ -77,16 +77,14 @@ namespace AdventureGuide.Services
             return viewModel;
         }
 
-        private async Task<DestinationViewModel> GetDestinationsBySearch(int? pageNumber, string searchString)
+        private async Task<DestinationViewModel> GetDestinationsBySearch(DestinationViewModel viewModel, string searchString)
         {
-            DestinationViewModel viewModel = new DestinationViewModel();
             DestinationKeyword keyword;
-            if (Enum.TryParse<DestinationKeyword>(searchString, out keyword))
+            if (Enum.TryParse(searchString, out keyword))
             {
                 List<Keyword> keywords = _context.Keyword.Where(i => i.KeywordString.Equals(searchString)).ToList();
                 List<Destination> destinations = new List<Destination>();
                 viewModel.PageViewModel.TotalCount = destinations.Count();
-                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
                 foreach (Keyword key in keywords)
                 {
                     destinations.Add(_context.Destination.Where(s => s.Id == key.DestinationId).First());
@@ -102,7 +100,6 @@ namespace AdventureGuide.Services
             {
                 var destinationList = await _context.Destination.Where(s => s.Name.Contains(searchString)).ToListAsync();
                 viewModel.PageViewModel.TotalCount = destinationList.Count();
-                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
                 foreach (Destination destination in destinationList.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
                 {
                     await GetImagePaths(destination);
