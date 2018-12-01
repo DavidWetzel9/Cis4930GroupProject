@@ -15,9 +15,11 @@
                             <p class="mt-3 mr-3 font-weight-light">Average rating:</p> <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
                         </div>
                     </div>
-                    <div>
+                    <div class="d-flex">
                         <p>@Model.Address @Model.City @Model.State, @Model.Country @Model.Zip</p>
+                        <a class="small mt-1 ml-1" href="#" id="showLocationModalLink">Show on map</a>
                     </div>
+
                     <div>
                         @foreach (Keyword keyword in Model.Keywords)
                         {
@@ -45,19 +47,9 @@
             </div>
             <hr />
 
-            <div class="col-sm-12 p-05">
-                <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
-                    <div class="card-body wrap-map flex-item">
-                        <div class="destination-map" id="map"></div>
-                    </div>
-                </div>
-            </div>
-
-            <input class="hidden-lat" type="hidden" value="@Model.Latitude" />
-            <input class="hidden-lon" type="hidden" value="@Model.Longitude" />
             <div class="review-background">
                 <div class="d-flex justify-content-start">
-                   
+
                     <h2>Reviews</h2>
 
                     @if (User.Identity.IsAuthenticated)
@@ -77,6 +69,33 @@
 
                 <div id="DestinationComment">
                     <partial name="_ReviewDetails" model="Model.Reviews" />
+                </div>
+            </div>
+        </div>
+
+        <!-- View Map Modal -->
+        <div class="modal fade" id="LocationModal" tabindex="-1" role="dialog" aria-labelledby="LocationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="application" style="width:34rem; min-width:34rem">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="LocationModalLabel">Map</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body d-flex justify-content-center">
+                        <div class="wrap-map">
+                            <div class="destination-map" id="map"></div>
+                        </div>
+
+                        <input class="hidden-lat" type="hidden" value="@Model.Latitude" />
+                        <input class="hidden-lon" type="hidden" value="@Model.Longitude" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,8 +158,19 @@
 <script src="~/lib/leaflet/dist/leaflet.js"></script>
 <script src="~/js/MapHelper.js"></script>
 <script>
-    $(document).ready(function () {
-        ShowMap();
+    $(document).ready(function () { // onlick listener for locations modal
+        $("#showLocationModalLink").click(
+            function () {
+                $("#LocationModal").modal();
+            }
+        );
     });
 </script>
-    
+
+<script>
+    $(document).ready(function () { // render map for locations modal only AFTER the modal is loaded (map will bug out if modal hasn't set its' dimensions yet)
+        $('#LocationModal').on('shown.bs.modal', function () {
+            ShowMap();
+        })
+    });
+</script>
