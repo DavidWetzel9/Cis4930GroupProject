@@ -36,7 +36,7 @@
             </div>
 
             <div class="text-center">
-                <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" id="destinationThumbnail" />
+                <img src="@Url.Content(Model.ImagePaths.First().Path)" class="rounded" style="max-width:256px;max-height:256px" alt="Destination image" id="destinationThumbnail" />
                 <form>
                     <button class="btn btn-primary mt-2" type="button" data-toggle="modal" data-target="#PhotosModal">
                         View more photos
@@ -96,15 +96,15 @@
 
     <!-- View Photos Modal -->
     <div class="modal fade" id="PhotosModal" tabindex="-1" role="dialog" aria-labelledby="PhotosModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document" style="width:90%; min-width:90%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="photosModalLabel">Photos</h5>
+                    <h5 class="modal-title" id="photosModalLabel">Photos for @Model.Name</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body d-flex flex-wrap justify-content-center">
                     @if (Model.ImagePaths.Any())
                     {
                         @foreach (ImagePath imagePath in Model.ImagePaths)

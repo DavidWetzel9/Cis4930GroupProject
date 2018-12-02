@@ -25,11 +25,6 @@
     border: none;
 }
 
-.homepage {
-    background-image: url("/images/homepage_background_image.jpg");
-    min-height: 1000px;
-}
-
 .my-star .caption {
     display: none;
 }
@@ -78,7 +73,6 @@ label[class="error"] {
 .about-text{
  margin-left:25%;
  margin-right:25%;
- background-color:ghostwhite;
 }
 
 h1{
@@ -92,7 +86,6 @@ h1{
     margin:0;
     padding:0;
 }
-
 
 /*responsive*/
 .form-container {
@@ -121,4 +114,8 @@ h1{
 
 .disable-cursor {
     cursor: not-allowed;
+}
+
+.responsive-text {
+    font-size:2vw;
 }
