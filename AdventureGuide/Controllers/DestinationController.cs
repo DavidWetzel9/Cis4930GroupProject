@@ -72,6 +72,16 @@ namespace AdventureGuide.Controllers
             return RedirectToAction("Details", new { destinationId = destination.Id });
         }
 
+        [HttpGet]
+        public JsonResult FindUserReviews(int destinationId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Json(_service.HasReview(destinationId, _userManager.GetUserName(User)));
+            }
+            return Json(false);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<PartialViewResult> SubmitReview([FromBody] Review review)

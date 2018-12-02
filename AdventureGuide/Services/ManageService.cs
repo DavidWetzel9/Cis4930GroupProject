@@ -64,6 +64,9 @@ namespace AdventureGuide.Services
         public void EditReview(Review review)
         {
             Review r = _context.Review.Where(s => s.Id == review.Id).First();
+            Destination destination = _context.Destination.Where(s => s.Id == r.DestinationId).First();
+            destination.RatingSum -= r.Rating;
+            destination.RatingSum += review.Rating;
             r.Comment = review.Comment;
             r.Rating = review.Rating;
             _context.SaveChanges();
@@ -72,6 +75,9 @@ namespace AdventureGuide.Services
         public void DeleteReview(int id)
         {
             Review review = _context.Review.Where(s => s.Id == id).First();
+            Destination destination = _context.Destination.Where(s => s.Id == review.DestinationId).First();
+            destination.RatingCount -= 1;
+            destination.RatingSum -= review.Rating;
             _context.Review.Remove(review);
             _context.SaveChanges();
         }
