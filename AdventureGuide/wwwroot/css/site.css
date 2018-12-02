@@ -74,6 +74,11 @@ label[class="error"] {
     margin-bottom: 0;
     line-height: 1;
 }
+textarea[class="form-control error"] {
+    border: 1px solid red !important;
+    box-shadow: 0 0 10px red;
+    outline: none !important;
+}
 
 .about-text{
  margin-left:25%;

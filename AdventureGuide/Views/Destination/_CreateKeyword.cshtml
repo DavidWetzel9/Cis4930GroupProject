@@ -13,10 +13,9 @@
         <div class="modal-body">
             <div id="KeywordList">
                 <input type="text" name="SearchString" id="KeywordAutoComplete" placeholder="Search" />
+                <button class="btn btn-sm btn-outline-success float-right" onclick="AddToDestination()"> Add Keyword </button>
             </div>
-            <div id="ModalKeywordHolder">
-
-
+            <div class="pt-3" id="ModalKeywordHolder">
                 @for (int i = 0; i < Model.Count; i++)
                 {
                     Keyword keyword = Model[i];
@@ -33,7 +32,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" onclick="addKeywordsToForm()">Add Keywords</button>
+            <button type="button" class="btn btn-success" onclick="addKeywordsToForm()">Add Keywords To Form!</button>
         </div>
     </div>
 </div>
@@ -42,8 +41,17 @@
 <script type="text/javascript">
 
     $("#KeywordAutoComplete").keydown(function (event) {
-        var keypressed = event.keyCode || event.which;
-        if (keypressed == 13) { AddToDestination(); }
+        if (event.keyCode == 13) {
+
+            event.preventDefault();
+            if ($(this).val() === "") {
+                return false;
+            }
+            AddToDestination();
+            $(this).val("");
+            event.currentTarget.value = "";
+            return false;
+        }
     });
 
     $(function () {
@@ -65,20 +73,27 @@
         });
     });
 
+    function ClearSearch() {
+        document.getElementById("KeywordAutoComplete").value = "";
+        console.log("meow");
+    }
+
     function AddToDestination() {
         var autoComplete = document.getElementById("KeywordAutoComplete");
 
         var parentDiv = document.createElement("div");
-        parentDiv.classList.add("row");
+        parentDiv.classList.add("row", "pl-3", "pb-3");
         var buttonDiv = document.createElement("div");
         buttonDiv.classList.add("d-flex", "justify-content-center");
         var button = document.createElement("button");
-        button.classList.add("btn", "btn-danger");
+        button.classList.add("btn", "btn-outline-danger");
         button.setAttribute("type", "button");
         button.innerHTML = "&#8854";
         var nameDiv = document.createElement("div");
         var nameInput = document.createElement("input");
         nameInput.value = autoComplete.value;
+        nameInput.classList.add("form-control");
+        nameInput.disabled = true;
 
         var keywordHolder = document.getElementById("ModalKeywordHolder");
 
@@ -119,17 +134,16 @@
 
     function addValuesToForm(nameValue, index) {
         var parentDiv = document.createElement("div");
-        parentDiv.classList.add("row");
-        var nameDiv = document.createElement("div");
+        parentDiv.classList.add("col-sm-3", "pb-3");
+        //var nameDiv = document.createElement("div");
         var nameInput = document.createElement("input");
         nameInput.classList.add("form-control");
         nameInput.value = nameValue;
         nameInput.readOnly = true;
         nameInput.name = "Keywords[" + index + "].KeywordString";
-        nameDiv.appendChild(nameInput);
-        parentDiv.appendChild(nameDiv);
+        //nameDiv.appendChild(nameInput);
+        parentDiv.appendChild(nameInput);
         document.getElementById("KeywordForm").appendChild(parentDiv);
-
     }
 
     function removeTextNodes(parentNode) {

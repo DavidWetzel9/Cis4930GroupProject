@@ -14,43 +14,44 @@
         </div>
         <div>
             <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" required />
+            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
         </div>
         <div>
             <label asp-for="Address" class="control-label"></label>
             <input asp-for="Address" class="form-control" id="Address" required />
         </div>
-        <div>
-            <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" id="City" required />
+        <div class="row">
+            <div class="col-sm-4">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" id="City" required />
+            </div>
+            <div class="col-sm-4">
+                <label class="control-label"> State / Province</label>
+                <input asp-for="State" class="form-control" id="State" required />
+            </div>
+            <div class="col-sm-4">
+                <label asp-for="Zip" class="control-label"></label>
+                <input asp-for="Zip" class="form-control" required />
+            </div>
         </div>
         <div>
-            <label asp-for="State" class="control-label"></label>
-            <input asp-for="State" class="form-control" id="State" required />
+
         </div>
         <div>
             <label asp-for="Country" class="control-label"></label>
             <input asp-for="Country" class="form-control" id="Country" required />
         </div>
-        <div>
-            <label asp-for="Zip" class="control-label"></label>
-            <input asp-for="Zip" class="form-control" required />
-        </div>
+
         <div>
             <input asp-for="Latitude" type="hidden" id="Lat" />
             <input asp-for="Longitude" type="hidden" id="Lon" />
         </div>
         <label asp-for="Keywords" class="control-label"></label>
-        <div id="KeywordForm">
-            @for (int i = 0; i < Model.Keywords.Count; i++)
-            {
-                Keyword keyword = Model.Keywords[i];
-                string name = $"Keywords[{i}].KeywordString";
-
-            }
+        <div id="KeywordForm" class="row pb-1">
+             
         </div>
 
-        <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
+        <button class="btn btn-success btn-sm pt-1" onclick="openKeywordModal()"> Add Keywords </button>
         <br /><br />
         <div class="form-group">
             <div class="custom-file" id="fileUploadBox">
