@@ -50,7 +50,7 @@
 
 
 /* Add styles to the form container */
-.container2 {
+.create-form-container {
     position: absolute;
     margin-top: 3%;
     margin-left: 13%;
@@ -76,8 +76,8 @@ label[class="error"] {
 }
 
 .about-text{
- margin-left:200px;
- margin-right:250px;
+ margin-left:25%;
+ margin-right:25%;
  background-color:ghostwhite;
 }
 
@@ -93,18 +93,11 @@ h1{
     padding:0;
 }
 
-.review-background{
-    background-color:mediumpurple;
-}
 
-.container3{
-    background-color:lightblue;
-    padding-right:0;
-    margin:0;
-}
-
-.container4 {
+/*responsive*/
+.form-container {
    padding:4%;
+    margin-left:5%;
     background-color: lightblue;
 }
 
