@@ -46,7 +46,7 @@ namespace AdventureGuide.Controllers
         public JsonResult KeywordAutoComplete()
         {
             List<string> keywords = new List<string>();
-            foreach(var keyword in Enum.GetNames(typeof(DestinationKeyword)))
+            foreach (var keyword in Enum.GetNames(typeof(DestinationKeyword)))
             {
                 keywords.Add(keyword);
             }
@@ -64,8 +64,8 @@ namespace AdventureGuide.Controllers
             destination.UserId = _userManager.GetUserId(User);
             _service.CreateDestination(destination);
 
-            if(pictures.Count > 0)
-            { 
+            if (pictures.Count > 0)
+            {
                 UploadPictures(pictures, destination.Id);
             }
 
@@ -77,7 +77,17 @@ namespace AdventureGuide.Controllers
         public async Task<PartialViewResult> SubmitReview([FromBody] Review review)
         {
             review.Username = _userManager.GetUserName(User);
-            return PartialView("_ReviewDetails", await (_service.AddReview(review)));
+            return PartialView("_ReviewDetails", await _service.AddReview(review));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<PartialViewResult> SubmitImages(int newDestinationId) {
+            IFormFileCollection pictures = Request.Form.Files;
+
+            UploadPictures(pictures, newDestinationId);
+
+            return PartialView("_PhotoGrid", await _service.GetNewImages(newDestinationId));
         }
 
         private void UploadPictures(IFormFileCollection pictures, int newDestinationId)

@@ -131,72 +131,112 @@
     <div class="modal fade" id="AddReviewModal" tabindex="-1" role="dialog" aria-labelledby="AddReviewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="application">
             <div class="modal-content" style="min-width:45rem">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="AddReviewModalLabel">Add a Review for @Model.Name</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex justify-content-start">
-                                <h3 class="mt-2 mr-3">Rate: </h3>
-                                <input id="newStarRating" name="star-rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5">
-                            </div>
-
-                            <div>
-                                <div class="custom-file" id="fileUploadBox">
-                                    <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
-                                    <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
-                                    <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <textarea class="form-control" rows="4" id="newReviewComment"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-danger alert-dismissible fade show p-2" role="alert" id="badFileUploadAlert">
-                        <p class="font-weight-bold">File upload error</p>
-                        <hr>
-                        One or more files that you tried to upload were the wrong type (allowed extensions: .jpg, .png, .jpeg). Please try again.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <form asp-action="AddReview" id="AddReviewForm" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="AddReviewModalLabel">Add a Review for @Model.Name</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary ml-2">Publish</button>
-                </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-start">
+                                    <h3 class="mt-2 mr-3">Rate: </h3>
+                                    <input id="StarRating" name="starRating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5">
+                                </div>
+
+                                <div>
+                                    <div class="custom-file" id="fileUploadBox">
+                                        <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
+                                        <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
+                                        <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <textarea class="form-control" rows="4" name="userComment" id="UserComment"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissible fade show p-2" role="alert" id="badFileUploadAlert">
+                            <p class="font-weight-bold">File upload error</p>
+                            <hr>
+                            One or more files that you tried to upload were the wrong type (allowed extensions: .jpg, .png, .jpeg). Please try again.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary ml-2" onclick="SubmitReview(@Model.Id)">Publish</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+
     function SubmitReview(id)
     {
-        var data = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
+        // submit the review itself
+        var textData = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
         $.ajax({
             method: 'POST',
             url: "@Url.Action("SubmitReview", "Destination")",
-            data: JSON.stringify(data),
+            data: JSON.stringify(textData),
             timeout: 60000,
             dataType: "html",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
-                $("#UserComment").val("");
                 $("#DestinationComment").html(response);
+                $("input.rating").rating();
             }
         })
+
+        // submit images associated with review (if there are any)
+        var imageData = new FormData();
+        var numFiles = $('#customFile').prop("files").length;
+
+        for (var i = 0; i < numFiles; i++) {
+            imageData.append("imageToUpload_" + i, $('#customFile')[0].files[i]);
+        }
+
+        imageData.append("newDestinationId", @Model.Id);
+
+        $.ajax({
+            method: 'POST',
+            url: "@Url.Action("SubmitImages", "Destination")",
+            data: imageData,
+            timeout: 60000,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                // idk man
+            }
+        })
+
+        $('#AddReviewModal').modal('toggle');
     }
 </script>
+
+<!-- TODO: validate review input (user has to at least add star rating for review to be published?)
+<script>
+    function ValidateReviewData() {
+        event.preventDefault();
+        if (!$("#CreateForm").valid()) {
+            return false;
+        }
+        ValidateAddress();
+    }
+</script>
+-->
 
 <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
 <script src="~/lib/leaflet/dist/leaflet.js"></script>

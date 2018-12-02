@@ -109,6 +109,27 @@ namespace AdventureGuide.Services
             return viewModel;
         }
 
+        public async Task<List<ImagePath>> GetNewImages(int destinationId)
+        {
+            List<ImagePath> images = await _context.ImagePath.Where(i => i.DestinationId == destinationId).ToListAsync();
+
+            if (!images.Any())  // check if destination has image associated with it, if not, use placeholder image
+            {
+                string defaultDestinationImagePath = "/images/defaultDestinationImage.png";
+
+                ImagePath defaultImage = new ImagePath
+                {
+                    DestinationId = destinationId,
+                    Id = 0,
+                    Path = defaultDestinationImagePath
+                };
+
+                images.Add(defaultImage);
+            }
+
+            return images;
+        }
+
         private async Task GetImagePaths(Destination destination)
         {
             destination.ImagePaths = await _context.ImagePath.Where(i => i.DestinationId == destination.Id).ToListAsync();
