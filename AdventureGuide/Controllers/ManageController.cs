@@ -175,22 +175,10 @@ namespace AdventureGuide.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public ActionResult AllReviews()
+        public async Task<ActionResult> Users(int? pageNumber)
         {
-            return View();
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Users()
-        {
-            return View();
-        }
-
-        [Authorize(Roles = "User")]
-        public ActionResult Delete()
-        {
-            return View();
+            UserViewModel viewModel = await _service.GetAllUsers(pageNumber);
+            return View(viewModel);
         }
 
         [HttpDelete]
@@ -206,6 +194,21 @@ namespace AdventureGuide.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Admin")]
+        public ActionResult DeleteUser(string userId, string userName)
+        {
+            _service.DeleteAccount(userId, userName);
+            return RedirectToAction("Users");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> AllReviews(int? pageNumber)
+        {
+            return View(await _service.GetAllReviews(pageNumber));
+        }
+
+        [HttpGet]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> Reviews(int? pageNumber)
         {
@@ -213,10 +216,14 @@ namespace AdventureGuide.Controllers
             return View(await _service.GetUserReviews(pageNumber, userName));
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User, Admin")]
         public ActionResult DeleteReview(int id)
         {
             _service.DeleteReview(id);
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AllReviews");
+            }
             return RedirectToAction("Reviews");
         }
 

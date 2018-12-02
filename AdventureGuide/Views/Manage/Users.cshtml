@@ -1,4 +1,6 @@
-﻿
+﻿@model AdventureGuide.ViewModels.ManageViewModels.UserViewModel
+@using Microsoft.AspNetCore.Identity
+
 @{
     ViewData["Title"] = "Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,3 +8,28 @@
 
 <h2>Users</h2>
 
+<div>
+    @if (Model.Users.Any())
+    {
+        @foreach (Microsoft.AspNetCore.Identity.IdentityUser user in Model.Users)
+        {
+            <partial name="_UserListIndex" model="user" />
+        }
+    }
+</div>
+
+@{
+    var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Users"
+   asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Users"
+   asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
