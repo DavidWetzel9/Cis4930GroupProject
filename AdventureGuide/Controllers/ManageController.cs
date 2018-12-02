@@ -175,24 +175,29 @@ namespace AdventureGuide.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public ActionResult Users()
+        public async Task<ActionResult> Users(int? pageNumber)
         {
-            return View();
+            UserViewModel viewModel = await _service.GetAllUsers(pageNumber);
+            return View(viewModel);
         }
 
         [HttpDelete]
-        [Authorize(Roles = "User, Admin")]
+        [Authorize(Roles = "User")]
         public async void DeleteAccount()
         {
             string userName = _userManager.GetUserName(User);
             string userId = _userManager.GetUserId(User);
 
-            if (User.IsInRole("User"))
-            {
-                await _signInManager.SignOutAsync();
-            }
+            await _signInManager.SignOutAsync();
 
             _service.DeleteAccount(userId, userName);
+        }
+
+        [HttpDelete]
+        [Authorize(Roles ="Admin")]
+        public async void DeleteAccount(string userId)
+        {
+
         }
 
         [HttpGet]
