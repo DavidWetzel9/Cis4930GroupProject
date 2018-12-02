@@ -98,7 +98,8 @@ h1{
 .form-container {
    padding:4%;
     margin-left:5%;
-    background-color: lightblue;
+    margin-top:2%;
+    background-color: ghostwhite;
 }
 
 .img-container {
@@ -121,4 +122,74 @@ h1{
 
 .disable-cursor {
     cursor: not-allowed;
+}
+
+.manage-options {
+    border-bottom: 1px solid #e1e4e8;
+    display: block;
+    padding: 8px 10px;
+    position: relative;
+   
+}
+
+.options-border {
+    background-color: #fff;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    list-style: none;
+    margin-bottom: 15px;
+  
+  
+}
+.menu {
+    background-color: #fff;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    list-style: none;
+    margin-bottom: 15px;
+ 
+}
+.menu-heading {
+    background-color: #f3f5f8;
+    border-bottom: 1px solid #e1e4e8;
+    color: #586069;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 8px 10px;
+}
+
+.manage-container{
+    width:50%;
+    margin-left:3%;
+}
+
+.delete-button {
+    background-position: -1px -1px;
+    background-repeat: repeat-x;
+    background-size: 110% 110%;
+    border: 1px solid rgba(27,31,35,.2);
+    border-radius: .25em;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 12px;
+    position: relative;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.delete-page{
+    margin-left:3%;
+    margin-top:2%;
+}
+
+.create-button{
+    margin-top:3%;
 }

@@ -2,14 +2,18 @@
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="delete-page">
+    <h2>Deleting Account</h2>
+    <p>
+        Are you sure you want to delete your account?<br>
+        We are sorry to see you go!
+    </p>
 
-<h2>Deleting Account</h2>
-<p>Are you sure you want to delete your account?<br>
-    We are sorry to see you go!</p>
+    <button onclick="DeleteAccount()" class="btn-danger delete-button btn-lg mt-1">Delete</button>
 
-<button onclick="DeleteAccount()">Delete</button>
 
-<script type="text/javascript">
+    </div>
+    <script type="text/javascript">
     function DeleteAccount()
     {
         $.ajax({
@@ -22,4 +26,4 @@
             }
         })
     }
-</script>
+    </script>
