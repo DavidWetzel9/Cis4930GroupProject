@@ -18,7 +18,6 @@ namespace AdventureGuide.Services
             _context = context;
         }
 
-        //TODO: Complete deleting account
         public void DeleteAccount(string id, string userName)
         {
             var userRolesList = _context.UserRoles.Where(s => s.UserId == id).ToList();
@@ -39,6 +38,20 @@ namespace AdventureGuide.Services
                 _context.Users.Remove(u);
             }
             _context.SaveChanges();
+        }
+
+        public async Task<ReviewViewModel> GetAllReviews(int? pageNumber)
+        {
+            ReviewViewModel viewModel = new ReviewViewModel();
+            var allReviews = await _context.Review.OrderBy(s => s.Username).ToListAsync();
+            viewModel.PageViewModel.TotalCount = await _context.Review.CountAsync();
+            viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
+            foreach (Review review in allReviews.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
+            {
+                review.DestinationName = _context.Destination.Where(i => i.Id == review.DestinationId).First().Name;
+                viewModel.Reviews.Add(review);
+            }
+            return viewModel;
         }
 
         public async Task<ReviewViewModel> GetUserReviews(int? pageNumber, string userName)
