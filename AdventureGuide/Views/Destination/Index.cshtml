@@ -1,60 +1,91 @@
-@model AdventureGuide.ViewModels.DestinationViewModel
+@model AdventureGuide.ViewModels.DestinationViewModels.DestinationViewModel
 @using AdventureGuide.Models.Destinations;
 
 @{
     ViewData["Title"] = "Index";
 }
 
-
-<div class="container body-content">
-    <form asp-action="Index" method="get" class="d-flex justify-content-center row my-3">
-        <div class="input-group">
-            <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
-            <span class="input-group-append">
-                <button class="btn btn-outline-primary border-left-0 border" type="submit">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </div>
-    </form>
-
-    <p>
-        <h3 id="resultsTitle">Search results</h3>
-    </p>
-
-    <div>
-        @if (Model.Destinations.Any())
-        {
-            @foreach (Destination destination in Model.Destinations)
-            {
-                <partial name="_ListIndex" model="destination" />
-            }
+<div class="destination-background">
+    <div class="container body-content">
+        <form asp-action="Index" method="get" class="d-flex justify-content-center row pt-3">
+            <div class="input-group">
+                <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+                <span class="input-group-append">
+                    <button class="btn btn-outline-primary border-left-0 border" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        @{
+            var check = Model.PageViewModel.IsMapView ? "checked" : "";
         }
+        <div>
+            <h3 id="resultsTitle">Search results</h3>
+            <input type="checkbox" id="CheckBox" onclick="ToggleView()" @check />
+            <label for="CheckBox">Show results on map</label>
+        </div>
+
+        <div id="ListView">
+            @if (Model.Destinations.Any())
+            {
+                @foreach (Destination destination in Model.Destinations)
+                {
+                    <partial name="_ListIndex" model="destination" />
+                }
+            }
+        </div>
+        <div class="d-none" id="MapView">
+            <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
+                <div class="card-body wrap-map flex-item">
+                    <div class="destination-map" id="map"></div>
+                </div>
+            </div>
+        </div>
+
+        @{
+            var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
+        }
+
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled"
+           id="PrevButton">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled"
+           id="NextButton">
+            Next
+        </a>
+
+        <a asp-action="Index" method="get" class="btn btn-default">Show all destinations</a>
     </div>
-
-    @{
-        var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
-    }
-
-    <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @prevDisabled">
-        Previous
-    </a>
-    <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @nextDisabled">
-        Next
-    </a>
-
-    <a asp-action="Index" method="get" class="btn btn-default">Show all destinations</a>
 </div>
-<script>
+
+
+@foreach (Destination destination in Model.Destinations)
+{
+    <input class="hidden-name" type="hidden" value="@destination.Name" />
+    <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
+    <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
+    <input class="hidden-rating" type="hidden" value="@destination.Rating" />
+    <input class="hidden-id" type="hidden" value="@destination.Id" />
+    <input class="hidden-img" type="hidden" value="@destination.ImagePaths.First().Path" />
+    <input class="hidden-desc" type="hidden" value="@destination.Description" />
+}
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
+<script type="text/javascript">
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
+    var prevUrl;
+    var nextUrl;
     $(document).ready(function () {
         var searchString = "@ViewData["CurrentFilter"]";
         if (searchString != "" && searchString != null) {
@@ -62,5 +93,35 @@
         } else {
             $("#resultsTitle").html("All Destinations");
         }
+        prevUrl = $("#PrevButton").attr("href");
+        nextUrl = $("#NextButton").attr("href");
+        ToggleView();
     });
+
+    function ToggleView() {
+        if (document.getElementById("CheckBox").checked) {
+            document.getElementById("ListView").classList.add("d-none");
+            document.getElementById("MapView").classList.remove("d-none");
+            AdjustUrl(true);
+            ShowMap();
+        }
+        else {
+            document.getElementById("ListView").classList.remove("d-none");
+            document.getElementById("MapView").classList.add("d-none");
+            AdjustUrl(false);
+        }
+    }
+
+    function DetailsUrl(element) {
+        var destinationId = $(element).data("string");
+        window.location.href = "/Destination/Details?destinationId=" + destinationId;
+    }
+
+    function AdjustUrl(value) {
+        $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
+        $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
+    }
 </script>
+
+
+

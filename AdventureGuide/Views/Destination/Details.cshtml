@@ -14,9 +14,11 @@
                         <p class="mt-3 mr-3 font-weight-light">Average rating:</p> <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
                     </div>
                 </div>
-                <div>
+                <div class="d-flex">
                     <p>@Model.Address @Model.City @Model.State, @Model.Country @Model.Zip</p>
+                    <a class="small mt-1 ml-1" href="#" id="showLocationModalLink">Show on map</a>
                 </div>
+
                 <div>
                     @foreach (Keyword keyword in Model.Keywords)
                     {
@@ -34,7 +36,7 @@
             </div>
 
             <div class="text-center">
-                <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" />
+                <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" id="destinationThumbnail" />
                 <form>
                     <button class="btn btn-primary mt-2" type="button" data-toggle="modal" data-target="#PhotosModal">
                         View more photos
@@ -43,40 +45,51 @@
             </div>
         </div>
         <hr />
+        <div class="d-flex justify-content-start">
+            <h2>Reviews</h2>
 
-        <!--
-        <div class="col-sm-12 p-05">
-            <div class="card card-order-info p-1 d-flex justify-content-around h-100 border-none">
-                <div class="card-body wrap-map flex-item">
-                    <div class="destination-map" id="map"></div>
-                </div>
-            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form>
+                    <button class="btn btn-sm btn-primary ml-2 mt-2" type="button" data-toggle="modal" data-target="#AddReviewModal" id="AddReviewBtn">
+                        Add a review for this place
+                    </button>
+                </form>
+            }
+            else
+            { 
+                <a class="nav-link mt-1" asp-action="Login" asp-controller="Account" asp-route-returnUrl="/Destination/Details?destinationId=@Model.Id">Log in to leave a review!</a>
+            }
         </div>
-        -->
-        <!--
-        -->
 
-        <div>
-            <div class="d-flex justify-content-start">
-                <h2>Reviews</h2>
+        <div id="DestinationComment">
+            <partial name="_ReviewDetails" model="Model.Reviews" />
+        </div>
+    </div>
 
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <form>
-                        <!-- TODO: implement route to add review IF it does not exist-->
-                        <button class="btn-sm btn-primary ml-2 mt-2" type="submit">
-                            Add a review for this place
-                        </button>
-                    </form>
-                }
-                else
-                { <!-- TODO: try to stay on destination details page after logging in/making account-->
-                    <a class="nav-link mt-1" asp-area="Identity" asp-page="/Account/Login">Log in to leave a review!</a>
-                }
-            </div>
+    <!-- View Map Modal -->
+    <div class="modal fade" id="LocationModal" tabindex="-1" role="dialog" aria-labelledby="LocationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="application" style="width:34rem; min-width:34rem">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LocationModalLabel">Map</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-            <div id="DestinationComment">
-                <partial name="_ReviewDetails" model="Model.Reviews" />
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="wrap-map">
+                        <div class="destination-map" id="map"></div>
+                    </div>
+
+                    <input class="hidden-lat" type="hidden" value="@Model.Latitude" />
+                    <input class="hidden-lon" type="hidden" value="@Model.Longitude" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -102,7 +115,7 @@
                             }
                             else
                             {
-                                <div> There are no images for this destination!</div>
+                                <div> There are no photos for this destination!</div>
                             }
                         }
                     }
@@ -113,32 +126,179 @@
             </div>
         </div>
     </div>
-</div>
-<script type="text/javascript">
 
-    function SubmitReview(id)
-    {
-        var data = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
-        $.ajax({
-            method: 'POST',
-            url: "@Url.Action("SubmitReview", "Destination")",
-            data: JSON.stringify(data),
-            timeout: 60000,
-            dataType: "html",
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                $("#UserComment").val("");
-                $("#DestinationComment").html(response);
-            }
-        })
-    }
-</script>
-<!--
+    <!-- Add Review Modal -->
+    <div class="modal fade" id="AddReviewModal" tabindex="-1" role="dialog" aria-labelledby="AddReviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="application">
+            <div class="modal-content" style="min-width:45rem">
+                <form asp-action="AddReview" id="AddReviewForm" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="AddReviewModalLabel">Add a Review for @Model.Name</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-start">
+                                    <h3 class="mt-2 mr-3">Rate: </h3>
+                                    <input id="StarRating" name="starRating" class="rating rating-loading" required data-min="0" data-max="5" data-step="0.5">
+                                </div>
+
+                                <div>
+                                    <div class="custom-file" id="fileUploadBox">
+                                        <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
+                                        <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
+                                        <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <textarea class="form-control" rows="4" name="userComment" id="UserComment" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissible fade show p-2" role="alert" id="badFileUploadAlert">
+                            <p class="font-weight-bold">File upload error</p>
+                            <hr>
+                            One or more files that you tried to upload were the wrong type (allowed extensions: .jpg, .png, .jpeg). Please try again.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary ml-2" onclick="SubmitReview(@Model.Id)">Publish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
 <script src="~/lib/leaflet/dist/leaflet.js"></script>
 <script src="~/js/MapHelper.js"></script>
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
+<script type="text/javascript">
+    function checkReviews() {
+        var data = { "destinationId": @Model.Id };
+        $.ajax({
+            method: 'GET',
+            url: "@Url.Action("FindUserReviews", "Destination")",
+            data: data,
+            timeout: 60000,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                console.log(response);
+                if (response) {
+                    $("#AddReviewBtn").prop("disabled", true);
+                    $("#AddReviewBtn").addClass("disable-cursor");
+                }
+            }
+        });
+    }
+
+    function SubmitReview(id)
+    {
+        if (!$("#AddReviewForm").valid()) {
+            return false;
+        }
+        // submit the review itself
+        var textData = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
+        $.ajax({
+            method: 'POST',
+            url: "@Url.Action("SubmitReview", "Destination")",
+            data: JSON.stringify(textData),
+            timeout: 60000,
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#DestinationComment").html(response);
+                $("input.rating").rating();
+                checkReviews();
+            }
+        });
+
+        // submit images associated with review (if there are any)
+        var imageData = new FormData();
+        var numFiles = $('#customFile').prop("files").length;
+
+        for (var i = 0; i < numFiles; i++) {
+            imageData.append("imageToUpload_" + i, $('#customFile')[0].files[i]);
+        }
+
+        imageData.append("newDestinationId", @Model.Id);
+
+        $.ajax({
+            method: 'POST',
+            url: "@Url.Action("SubmitImages", "Destination")",
+            data: imageData,
+            timeout: 60000,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (response) {
+                console.log(response[0].path);
+            }
+        });
+
+        $('#AddReviewModal').modal('toggle');
+    }
+
+    $(document).ready(function () { // onlick listener for locations modal
+        $("#showLocationModalLink").click(
+            function () {
+                $("#LocationModal").modal();
+            }
+        );
+        // render map for locations modal only AFTER the modal is loaded (map will bug out if modal hasn't set its' dimensions yet)
+        $('#LocationModal').on('shown.bs.modal', function () {
+            ShowMap();
+        });
+
+        // hide alert box for fileupload on document ready
+        $('#badFileUploadAlert').hide();
+
+        checkReviews();
+    });
 </script>
-    -->
+
+<script>
+    // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
+    $('input[type="file"]').change(function (queuedFiles) {
+
+        var fileNames = queuedFiles.target.files;
+
+        if (fileNames.length > 0) // set filenames in upload bar if user selected at least 1 or more file(s)
+        {
+            $('#customFileLabel').empty();
+
+            jQuery.each(fileNames, function (index, fileName) {
+                var ext = fileName.name.split('.').pop();
+
+                if (ext != 'jpg' && ext != 'png' && ext != 'jpeg') {  // if bad file extension, cancel upload, alert user
+                    $('#badFileUploadAlert').show();
+                    $('#customFileLabel').text("Upload photos");
+                    $('input[type="file"]').val('');
+
+                    return false;
+                }
+
+                if (index < fileNames.length - 1) {
+                    $('#customFileLabel').append(fileName.name + ', ');
+                } else {
+                    $('#customFileLabel').append(fileName.name);
+                }
+            });
+        } else {
+            $('#customFileLabel').text("Upload photos");
+        }
+    });
+</script>

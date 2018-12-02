@@ -4,78 +4,159 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="container body-content mt-3">
-    <h3>Create Destination</h3>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="CreateDestination">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="State" class="control-label"></label>
-                    <input asp-for="State" class="form-control" />
-                    <span asp-validation-for="State" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Country" class="control-label"></label>
-                    <input asp-for="Country" class="form-control" />
-                    <span asp-validation-for="Country" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Zip" class="control-label"></label>
-                    <input asp-for="Zip" class="form-control" />
-                    <span asp-validation-for="Zip" class="text-danger"></span>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Keywords" class="control-label"></label>
-                    <div id="KeywordForm">
-                        @for (int i = 0; i < Model.Keywords.Count; i++)
-                        {
-                            Keyword keyword = Model.Keywords[i];
-                            string name = $"Keywords[{i}].KeywordString";
+<div class="bg-img">
+    <form asp-action="CreateDestination" class="create-form-container" id="CreateForm" enctype="multipart/form-data">
+        <h2>Create Destination</h2>
+        <div>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div>
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" required />
+        </div>
+        <div>
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" id="Address" required />
+        </div>
+        <div>
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" id="City" required />
+        </div>
+        <div>
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control" id="State" required />
+        </div>
+        <div>
+            <label asp-for="Country" class="control-label"></label>
+            <input asp-for="Country" class="form-control" id="Country" required />
+        </div>
+        <div>
+            <label asp-for="Zip" class="control-label"></label>
+            <input asp-for="Zip" class="form-control" required />
+        </div>
+        <div>
+            <input asp-for="Latitude" type="hidden" id="Lat" />
+            <input asp-for="Longitude" type="hidden" id="Lon" />
+        </div>
+        <label asp-for="Keywords" class="control-label"></label>
+        <div id="KeywordForm">
+            @for (int i = 0; i < Model.Keywords.Count; i++)
+            {
+                Keyword keyword = Model.Keywords[i];
+                string name = $"Keywords[{i}].KeywordString";
 
-                        }
-                    </div>
-                </div>
-                <button class="btn btn-success" onclick="openKeywordModal()"> Add Keywords </button>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" asp-action="CreateDestination" />
-                </div>
-            </form>
+            }
         </div>
 
-    </div>
+        <button class="btn btn-success btn-sm" onclick="openKeywordModal()"> Add Keywords </button>
+        <br /><br />
+        <div class="form-group">
+            <div class="custom-file" id="fileUploadBox">
+                <label class="custom-file-label d-inline-block text-truncate" for="customFile" id="customFileLabel" style="padding-right: 5rem">Upload photos</label>
+                <input type="file" class="custom-file-input" id="customFile" name="pictures" accept=".png,.jpeg,.jpg" multiple>
+                <div class="small font-weight-light" id="fileUploadHint">Allowed file types: .jpg, .jpeg, .png</div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+                <div class="alert alert-danger alert-dismissible fade show p-2" role="alert" id="badFileUploadAlert" style="display:inline-block">
+                    One or more files that you tried to upload were the wrong type (allowed extensions: .jpg, .png, .jpeg). Please try again.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
 
-    <partial name="_CreateKeyword" model="Model.Keywords" />
+            <button class="btn btn-primary btn-lg" onclick="ValidateModel()">Create</button>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="float-right">Back to List</a>
+        </div>
+    </form>
 </div>
+
+<partial name="_CreateKeyword" model="Model.Keywords" />
+<partial name="_InvalidAddress" />
 <script>
     function openKeywordModal(e) {
         event.preventDefault();
         $("#keywords-window").modal({ 'show': true });
     }
+    function openInvalidModal(e) {
+        $("#invalid-address-window").modal({ 'show': true });
+    }
+    function SubmitForm() {
+        $("#CreateForm").submit();
+    }
+    function ValidateModel() {
+        event.preventDefault();
+        if (!$("#CreateForm").valid()) {
+            return false;
+        }
+        ValidateAddress();
+    }
+
+    async function ValidateAddress() {
+        geocoder = new google.maps.Geocoder();
+        var country = $("#Country").val();
+        var state = $("#State").val();
+        var city = $("#City").val();
+        var address = $("#Address").val();
+        var fullAddress = country + "," + state + "," + city + "," + address;
+        return geocoder.geocode({ 'address': fullAddress }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                $("#Lat").val(results[0].geometry.location.lat());
+                $("#Lon").val(results[0].geometry.location.lng());
+                SubmitForm();
+            }
+            else {
+                openInvalidModal();
+            }
+        });
+
+    }
+    function InitMap() { }
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtBnPXVollQ4Oh-0WyJ3g-vDgKPcH4Ew&callback=InitMap">
+</script>
+
+<script> // hide alert box for fileupload on document ready
+    $(document).ready(function () {
+        $('#badFileUploadAlert').hide();
+    });
+</script>
+
+<script>
+    // modify upload bar to show names of files being uploaded, or show danger text if bad file extension
+    $('input[type="file"]').change(function (queuedFiles) {
+
+        var fileNames = queuedFiles.target.files;
+
+        if (fileNames.length > 0) // set filenames in upload bar if user selected at least 1 or more file(s)
+        {
+            $('#customFileLabel').empty();
+
+            jQuery.each(fileNames, function (index, fileName) {
+                var ext = fileName.name.split('.').pop();
+
+                if (ext != 'jpg' && ext != 'png' && ext != 'jpeg') {  // if bad file extension, cancel upload, alert user
+                    $('#badFileUploadAlert').show();
+                    $('#customFileLabel').text("Upload photos");
+                    $('input[type="file"]').val('');
+
+                    return false;
+                }
+
+                if (index < fileNames.length - 1) {
+                    $('#customFileLabel').append(fileName.name + ', ');
+                } else {
+                    $('#customFileLabel').append(fileName.name);
+                }
+            });
+        } else {
+            $('#customFileLabel').text("Upload photos");
+        }
+    });
 </script>

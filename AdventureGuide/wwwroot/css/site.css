@@ -4,7 +4,7 @@
 
 .wrap-map {
     height: 500px;
-    width: 500px;
+    width: 100%;
 }
 
     .wrap-map .destination-map {
@@ -25,8 +25,9 @@
     border: none;
 }
 
-#homepage {
-    background-image: url("/images/homepage_background_repeat.jpg");
+.homepage {
+    background-image: url("/images/homepage_background_image.jpg");
+    min-height: 1000px;
 }
 
 .my-star .caption {
@@ -35,4 +36,89 @@
 
 .my-star .clear-rating {
     display: none;
+}
+
+.bg-img {
+    /* The image used */
+    background-image: url("/images/create_page_image.jpg");
+    min-height: 1000px;
+    /* Center and scale the image nicely */
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+
+/* Add styles to the form container */
+.create-form-container {
+    position: absolute;
+    margin-top: 3%;
+    margin-left: 13%;
+    min-width: 40%;
+    max-height: 100%;
+    padding: 30px;
+    background-color: lightblue;
+}
+
+input[class="form-control error"] {
+    border: 1px solid red !important;
+    box-shadow: 0 0 10px red;
+    outline: none !important;
+}
+
+label[class="error"] {
+    color: red;
+    display: block;
+    font-size: medium;
+    font-weight: normal;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.about-text{
+ margin-left:25%;
+ margin-right:25%;
+ background-color:ghostwhite;
+}
+
+h1{
+    text-align:center;
+   
+}
+
+.destination-background {
+    background-color: lightgreen;
+    min-height:1000px;
+    margin:0;
+    padding:0;
+}
+
+
+/*responsive*/
+.form-container {
+   padding:4%;
+    margin-left:5%;
+    background-color: lightblue;
+}
+
+.img-container {
+    max-width:128px;
+    max-height:128px;
+}
+
+.img-pin {
+    max-width: 96px;
+    max-height: 96px;
+}
+
+.list-min-width {
+    min-width: 800px;
+}
+
+.pin-flex {
+    flex-shrink: 0;
+}
+
+.disable-cursor {
+    cursor: not-allowed;
 }

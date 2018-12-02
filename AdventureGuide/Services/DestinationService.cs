@@ -1,12 +1,11 @@
 ﻿using AdventureGuide.Models;
-using AdventureGuide.ViewModels;
+using AdventureGuide.ViewModels.DestinationViewModels;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Hosting;
 
 namespace AdventureGuide.Services
 {
@@ -19,12 +18,15 @@ namespace AdventureGuide.Services
             _context = context;
         }
 
-        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString)
+        public async Task<DestinationViewModel> GetDestinations(int? pageNumber, string searchString, bool isMapView)
         {
-            if (String.IsNullOrEmpty(searchString))
-                return await GetDestinationsDefault(pageNumber);
+            DestinationViewModel viewModel = new DestinationViewModel();
+            viewModel.PageViewModel.PageNumber = pageNumber ?? 1;
+            viewModel.PageViewModel.IsMapView = isMapView;
+            if (string.IsNullOrEmpty(searchString))
+                return await GetDestinationsDefault(viewModel);
             else
-                return await GetDestinationsBySearch(pageNumber, searchString);
+                return await GetDestinationsBySearch(viewModel, searchString);
         }
 
         public async Task<Destination> GetDestinationDetails(int id)
@@ -46,6 +48,19 @@ namespace AdventureGuide.Services
             _context.SaveChanges();
         }
 
+        public void CreateImagePath(ImagePath imagePath)
+        {
+            _context.ImagePath.Add(imagePath);
+            _context.SaveChanges();
+        }
+
+        public bool HasReview(int destinationId, string username)
+        {
+            if (_context.Review.Any(s => s.DestinationId == destinationId && s.Username.Equals(username)))
+                return true;
+            return false;
+        }
+
         public async Task<List<Review>> AddReview(Review review)
         {
             Destination destination = _context.Destination.Where(i => i.Id == review.DestinationId).First();
@@ -57,11 +72,9 @@ namespace AdventureGuide.Services
             return reviews;
         }
 
-        private async Task<DestinationViewModel> GetDestinationsDefault(int? pageNumber)
+        private async Task<DestinationViewModel> GetDestinationsDefault(DestinationViewModel viewModel)
         {
-            DestinationViewModel viewModel = new DestinationViewModel();
             viewModel.PageViewModel.TotalCount = await _context.Destination.CountAsync();
-            viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
             foreach(Destination destination in await _context.Destination.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize).ToListAsync())
             {
                 await GetImagePaths(destination);
@@ -71,21 +84,18 @@ namespace AdventureGuide.Services
             return viewModel;
         }
 
-        private async Task<DestinationViewModel> GetDestinationsBySearch(int? pageNumber, string searchString)
+        private async Task<DestinationViewModel> GetDestinationsBySearch(DestinationViewModel viewModel, string searchString)
         {
-            DestinationViewModel viewModel = new DestinationViewModel();
-            DestinationKeyword keyword;
-            if (Enum.TryParse<DestinationKeyword>(searchString, out keyword))
+            if (Enum.TryParse(searchString, out DestinationKeyword keyword))
             {
-                List<Keyword> keywords = _context.Keyword.Where(i => i.KeywordString.Equals(searchString)).ToList();
+                List<int> destinationIds = await _context.Keyword.Where(i => i.KeywordEnum == keyword).Select(i => i.DestinationId).ToListAsync();
                 List<Destination> destinations = new List<Destination>();
-                viewModel.PageViewModel.TotalCount = destinations.Count();
-                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
-                foreach (Keyword key in keywords)
+                viewModel.PageViewModel.TotalCount = destinationIds.Count();
+                foreach (int id in destinationIds)
                 {
-                    destinations.Add(_context.Destination.Where(s => s.Id == key.DestinationId).First());
+                    destinations.Add(await _context.Destination.Where(s => s.Id == id).FirstAsync());
                 }
-                foreach(Destination destination in destinations.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
+                foreach (Destination destination in destinations.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
                 {
                     await GetImagePaths(destination);
 
@@ -94,9 +104,8 @@ namespace AdventureGuide.Services
             }
             else
             {
-                var destinationList = await _context.Destination.Where(s => s.Name.Contains(searchString)).ToListAsync();
+                List<Destination> destinationList = await _context.Destination.Where(s => s.Name.Contains(searchString) || s.City.Contains(searchString) || s.State.Contains(searchString)).ToListAsync();
                 viewModel.PageViewModel.TotalCount = destinationList.Count();
-                viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
                 foreach (Destination destination in destinationList.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
                 {
                     await GetImagePaths(destination);
@@ -107,13 +116,34 @@ namespace AdventureGuide.Services
             return viewModel;
         }
 
+        public async Task<List<ImagePath>> GetNewImages(int destinationId)
+        {
+            List<ImagePath> images = await _context.ImagePath.Where(i => i.DestinationId == destinationId).ToListAsync();
+
+            if (!images.Any())  // check if destination has image associated with it, if not, use placeholder image
+            {
+                string defaultDestinationImagePath = "/images/defaultDestinationImage.png";
+
+                ImagePath defaultImage = new ImagePath
+                {
+                    DestinationId = destinationId,
+                    Id = 0,
+                    Path = defaultDestinationImagePath
+                };
+
+                images.Add(defaultImage);
+            }
+
+            return images;
+        }
+
         private async Task GetImagePaths(Destination destination)
         {
             destination.ImagePaths = await _context.ImagePath.Where(i => i.DestinationId == destination.Id).ToListAsync();
 
             if (!destination.ImagePaths.Any())  // check if destination has image associated with it, if not, use placeholder image
             {
-                String defaultDestinationImagePath = "/images/defaultDestinationImage.png";
+                string defaultDestinationImagePath = "/images/defaultDestinationImage.png";
 
                 ImagePath defaultImage = new ImagePath
                 {
