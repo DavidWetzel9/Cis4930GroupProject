@@ -118,3 +118,7 @@ h1{
 .pin-flex {
     flex-shrink: 0;
 }
+
+.disable-cursor {
+    cursor: not-allowed;
+}

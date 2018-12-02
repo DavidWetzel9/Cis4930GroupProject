@@ -54,6 +54,13 @@ namespace AdventureGuide.Services
             _context.SaveChanges();
         }
 
+        public bool HasReview(int destinationId, string username)
+        {
+            if (_context.Review.Any(s => s.DestinationId == destinationId && s.Username.Equals(username)))
+                return true;
+            return false;
+        }
+
         public async Task<List<Review>> AddReview(Review review)
         {
             Destination destination = _context.Destination.Where(i => i.Id == review.DestinationId).First();

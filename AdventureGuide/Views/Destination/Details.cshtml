@@ -51,14 +51,14 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <form>
-                    <button class="btn-sm btn-primary ml-2 mt-2" type="button" data-toggle="modal" data-target="#AddReviewModal">
+                    <button class="btn btn-sm btn-primary ml-2 mt-2" type="button" data-toggle="modal" data-target="#AddReviewModal" id="AddReviewBtn">
                         Add a review for this place
                     </button>
                 </form>
             }
             else
-            { <!-- TODO: try to stay on destination details page after logging in/making account-->
-                <a class="nav-link mt-1" asp-action="Login" asp-controller="Account">Log in to leave a review!</a>
+            { 
+                <a class="nav-link mt-1" asp-action="Login" asp-controller="Account" asp-route-returnUrl="/Destination/Details?destinationId=@Model.Id">Log in to leave a review!</a>
             }
         </div>
 
@@ -144,7 +144,7 @@
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex justify-content-start">
                                     <h3 class="mt-2 mr-3">Rate: </h3>
-                                    <input id="StarRating" name="starRating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5">
+                                    <input id="StarRating" name="starRating" class="rating rating-loading" required data-min="0" data-max="5" data-step="0.5">
                                 </div>
 
                                 <div>
@@ -157,7 +157,7 @@
                             </div>
 
                             <div class="mt-4">
-                                <textarea class="form-control" rows="4" name="userComment" id="UserComment"></textarea>
+                                <textarea class="form-control" rows="4" name="userComment" id="UserComment" required></textarea>
                             </div>
                         </div>
 
@@ -181,10 +181,35 @@
     </div>
 </div>
 
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
+
 <script type="text/javascript">
+    function checkReviews() {
+        var data = { "destinationId": @Model.Id };
+        $.ajax({
+            method: 'GET',
+            url: "@Url.Action("FindUserReviews", "Destination")",
+            data: data,
+            timeout: 60000,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                console.log(response);
+                if (response) {
+                    $("#AddReviewBtn").prop("disabled", true);
+                    $("#AddReviewBtn").addClass("disable-cursor");
+                }
+            }
+        });
+    }
 
     function SubmitReview(id)
     {
+        if (!$("#AddReviewForm").valid()) {
+            return false;
+        }
         // submit the review itself
         var textData = { "DestinationId": id, "Rating": parseFloat($("#StarRating").val()), "Comment": $("#UserComment").val() };
         $.ajax({
@@ -197,8 +222,9 @@
             success: function (response) {
                 $("#DestinationComment").html(response);
                 $("input.rating").rating();
+                checkReviews();
             }
-        })
+        });
 
         // submit images associated with review (if there are any)
         var imageData = new FormData();
@@ -221,50 +247,26 @@
             success: function (response) {
                 console.log(response[0].path);
             }
-        })
+        });
 
         $('#AddReviewModal').modal('toggle');
     }
-</script>
 
-<!-- TODO: validate review input (user has to at least add star rating for review to be published?)
-<script>
-    function ValidateReviewData() {
-        event.preventDefault();
-        if (!$("#CreateForm").valid()) {
-            return false;
-        }
-        ValidateAddress();
-    }
-</script>
--->
-
-<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
-<script src="~/lib/leaflet/dist/leaflet.js"></script>
-<script src="~/js/MapHelper.js"></script>
-
-<script>
     $(document).ready(function () { // onlick listener for locations modal
         $("#showLocationModalLink").click(
             function () {
                 $("#LocationModal").modal();
             }
         );
-    });
-</script>
-
-<script>
-    $(document).ready(function () { // render map for locations modal only AFTER the modal is loaded (map will bug out if modal hasn't set its' dimensions yet)
+        // render map for locations modal only AFTER the modal is loaded (map will bug out if modal hasn't set its' dimensions yet)
         $('#LocationModal').on('shown.bs.modal', function () {
             ShowMap();
-        })
-    });
-</script>
+        });
 
-<script>
-    // hide alert box for fileupload on document ready
-    $(document).ready(function () {
+        // hide alert box for fileupload on document ready
         $('#badFileUploadAlert').hide();
+
+        checkReviews();
     });
 </script>
 
