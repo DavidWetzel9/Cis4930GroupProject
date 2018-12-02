@@ -7,7 +7,7 @@
 {
     <form asp-action="Logout" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item"> <a class="btn btn-link navbar-btn navbar-link text-white" asp-action="Index" asp-controller="Manage" title="Manage">Hello @UserManager.GetUserName(User)!</a> </li>
+            <li class="nav-item"> <a class="btn btn-link navbar-btn navbar-link text-white" asp-action="Index" asp-controller="Manage" title="Manage">Hello @UserManager.GetUserName(User)! (manage account)</a> </li>
             <li class="nav-item"> <button type="submit" class="btn btn-link navbar-btn navbar-link text-white">Logout</button> </li>
         </ul>
     </form>
@@ -16,6 +16,23 @@ else
 {
     <ul class="nav navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" asp-action="Register" asp-controller="Account">Register</a></li> 
-        <li class="nav-item"><a class="nav-link" asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Url.Action()">Login</a></li>
+        <li class="nav-item"><a id="LoginButton" class="nav-link" asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Url.Action()">Login</a></li>
     </ul>
+
+    <script>
+        $(document).ready(function () { // set navbar onclick to redirect to a specific details page after login
+            $.urlParam = function (name) {
+                var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                return results[1] || 0;
+            }
+
+            var param = $.urlParam('destinationId');
+
+            if (param != null && param != undefined) {
+                $("#LoginButton").click(function () {
+                    $(this).attr("href", $(this).attr("href") + "?destinationId=" + param);
+                    })
+            } 
+        });
+    </script>
 }
