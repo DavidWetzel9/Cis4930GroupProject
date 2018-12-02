@@ -3,7 +3,7 @@
 <li class="list-group-item list-group-item-action list-min-width" style="min-width:800px;" onclick="window.location='@Url.Action("Details", new { destinationId = Model.Id })'">
     <div class="d-flex justify-content-start">
         <div class="img-container">
-            <img class="img-container" src="@Url.Content(Model.ImagePaths.First().Path)" alt="Destination icon"/>
+            <img class="img-container img-thumbnail" src="@Url.Content(Model.ImagePaths.First().Path)" alt="Destination icon"/>
         </div>
         <div style="width:100%">
             <div class="ml-2">

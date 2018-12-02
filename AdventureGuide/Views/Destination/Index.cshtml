@@ -5,13 +5,13 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="destination-background">
+<div>
     <div class="container body-content">
         <form asp-action="Index" method="get" class="d-flex justify-content-center row pt-3">
             <div class="input-group">
                 <input class="form-control border-right-0 border" placeholder="Search destinations" name="currentFilter" value="@ViewData["CurrentFilter"]" />
                 <span class="input-group-append">
-                    <button class="btn btn-outline-primary border-left-0 border" type="submit">
+                    <button class="btn btn-outline-primary border-left-0 border" type="submit" style="background-color:lightgrey">
                         <i class="fa fa-search"></i>
                     </button>
                 </span>
