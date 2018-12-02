@@ -7,7 +7,7 @@
 {
     <form asp-action="Logout" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item"> <a class="btn btn-link navbar-btn navbar-link text-white" asp-action="Index" asp-controller="Manage" title="Manage">Hello @UserManager.GetUserName(User)! (manage account)</a> </li>
+            <li class="nav-item"> <a class="btn btn-link navbar-btn navbar-link text-white" asp-action="Index" asp-controller="Manage" title="Manage">Hello @UserManager.GetUserName(User)! (Settings)</a> </li>
             <li class="nav-item"> <button type="submit" class="btn btn-link navbar-btn navbar-link text-white">Logout</button> </li>
         </ul>
     </form>
