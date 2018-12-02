@@ -75,6 +75,8 @@
     <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
     <input class="hidden-rating" type="hidden" value="@destination.Rating" />
     <input class="hidden-id" type="hidden" value="@destination.Id" />
+    <input class="hidden-img" type="hidden" value="@destination.ImagePaths.First().Path" />
+    <input class="hidden-desc" type="hidden" value="@destination.Description" />
 }
 <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
 <script src="~/lib/leaflet/dist/leaflet.js"></script>
@@ -102,7 +104,6 @@
             document.getElementById("MapView").classList.remove("d-none");
             AdjustUrl(true);
             ShowMap();
-
         }
         else {
             document.getElementById("ListView").classList.remove("d-none");
@@ -111,18 +112,14 @@
         }
     }
 
+    function DetailsUrl(element) {
+        var destinationId = $(element).data("string");
+        window.location.href = "/Destination/Details?destinationId=" + destinationId;
+    }
+
     function AdjustUrl(value) {
         $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
         $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
-    }
-
-    function InitRating(element) {
-        // reinit star rating
-        var id = $(element).data("string");
-        console.log(document.getElementById(id));
-        console.log($("#" + id));
-        $("#" + id).rating();
-        console.log("meow");
     }
 </script>
 
