@@ -43,8 +43,6 @@
             </div>
         </div>
 
-
-
         @{
             var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
             var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
@@ -70,15 +68,20 @@
 </div>
 
 
-    @foreach (Destination destination in Model.Destinations)
-    {
-        <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
-        <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
-    }
-    <link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
-    <script src="~/lib/leaflet/dist/leaflet.js"></script>
-    <script src="~/js/MapHelper.js"></script>
-    <script>
+@foreach (Destination destination in Model.Destinations)
+{
+    <input class="hidden-name" type="hidden" value="@destination.Name" />
+    <input class="hidden-lat" type="hidden" value="@destination.Latitude" />
+    <input class="hidden-lon" type="hidden" value="@destination.Longitude" />
+    <input class="hidden-rating" type="hidden" value="@destination.Rating" />
+    <input class="hidden-id" type="hidden" value="@destination.Id" />
+    <input class="hidden-img" type="hidden" value="@destination.ImagePaths.First().Path" />
+    <input class="hidden-desc" type="hidden" value="@destination.Description" />
+}
+<link href="~/lib/leaflet/dist/leaflet.css" rel="stylesheet" />
+<script src="~/lib/leaflet/dist/leaflet.js"></script>
+<script src="~/js/MapHelper.js"></script>
+<script type="text/javascript">
     // change search results list "title text" to be either "Results for [place]" or "All destinations"
     // depending on input (or lack thereof) given by user
     var prevUrl;
@@ -101,7 +104,6 @@
             document.getElementById("MapView").classList.remove("d-none");
             AdjustUrl(true);
             ShowMap();
-
         }
         else {
             document.getElementById("ListView").classList.remove("d-none");
@@ -110,11 +112,16 @@
         }
     }
 
+    function DetailsUrl(element) {
+        var destinationId = $(element).data("string");
+        window.location.href = "/Destination/Details?destinationId=" + destinationId;
+    }
+
     function AdjustUrl(value) {
         $("#PrevButton").attr("href", prevUrl + "&isMapView=" + value);
         $("#NextButton").attr("href", nextUrl + "&isMapView=" + value);
     }
-    </script>
+</script>
 
 
 

@@ -1,9 +1,9 @@
 ﻿@model AdventureGuide.Models.Destinations.Destination;
 
-<li class="list-group-item list-group-item-action" style="min-width:800px;" onclick="window.location='@Url.Action("Details", new { destinationId = Model.Id })'">
+<li class="list-group-item list-group-item-action list-min-width" style="min-width:800px;" onclick="window.location='@Url.Action("Details", new { destinationId = Model.Id })'">
     <div class="d-flex justify-content-start">
-        <div>
-            <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:128px;max-height:128px" alt="Destination icon"/>
+        <div class="img-container">
+            <img class="img-container" src="@Url.Content(Model.ImagePaths.First().Path)" alt="Destination icon"/>
         </div>
         <div style="width:100%">
             <div class="ml-2">
