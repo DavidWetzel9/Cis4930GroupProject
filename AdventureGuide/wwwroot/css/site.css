@@ -25,11 +25,6 @@
     border: none;
 }
 
-.homepage {
-    background-image: url("/images/homepage_background_image.jpg");
-    min-height: 1000px;
-}
-
 .my-star .caption {
     display: none;
 }
@@ -74,11 +69,15 @@ label[class="error"] {
     margin-bottom: 0;
     line-height: 1;
 }
+textarea[class="form-control error"] {
+    border: 1px solid red !important;
+    box-shadow: 0 0 10px red;
+    outline: none !important;
+}
 
 .about-text{
  margin-left:25%;
  margin-right:25%;
- background-color:ghostwhite;
 }
 
 h1{
@@ -92,7 +91,6 @@ h1{
     margin:0;
     padding:0;
 }
-
 
 /*responsive*/
 .form-container {
@@ -123,6 +121,7 @@ h1{
 .disable-cursor {
     cursor: not-allowed;
 }
+
 
 .manage-options {
     border-bottom: 1px solid #e1e4e8;
@@ -192,4 +191,8 @@ h1{
 
 .create-button{
     margin-top:3%;
+}
+.responsive-text {
+    font-size:2vw;
+
 }
