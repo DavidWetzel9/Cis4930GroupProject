@@ -36,7 +36,7 @@
             </div>
 
             <div class="text-center">
-                <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" />
+                <img src="@Url.Content(Model.ImagePaths.First().Path)" style="max-width:256px;max-height:256px" alt="Destination image" id="destinationThumbnail" />
                 <form>
                     <button class="btn btn-primary mt-2" type="button" data-toggle="modal" data-target="#PhotosModal">
                         View more photos
@@ -217,8 +217,9 @@
             timeout: 60000,
             contentType: false,
             processData: false,
+            dataType: "json",
             success: function (response) {
-                // idk man
+                console.log(response[0].path);
             }
         })
 

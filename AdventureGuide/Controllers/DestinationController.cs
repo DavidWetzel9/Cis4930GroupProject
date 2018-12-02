@@ -82,12 +82,12 @@ namespace AdventureGuide.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<PartialViewResult> SubmitImages(int newDestinationId) {
+        public async Task<ActionResult> SubmitImages(int newDestinationId) {
             IFormFileCollection pictures = Request.Form.Files;
 
             UploadPictures(pictures, newDestinationId);
 
-            return PartialView("_PhotoGrid", await _service.GetNewImages(newDestinationId));
+            return Json(await _service.GetNewImages(newDestinationId));
         }
 
         private void UploadPictures(IFormFileCollection pictures, int newDestinationId)
