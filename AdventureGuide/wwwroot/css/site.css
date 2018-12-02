@@ -4,7 +4,7 @@
 
 .wrap-map {
     height: 500px;
-    width: 500px;
+    width: 100%;
 }
 
     .wrap-map .destination-map {
@@ -97,6 +97,24 @@ h1{
 /*responsive*/
 .form-container {
    padding:4%;
-   margin-left:5%;
-   background-color: lightblue;
+    margin-left:5%;
+    background-color: lightblue;
+}
+
+.img-container {
+    max-width:128px;
+    max-height:128px;
+}
+
+.img-pin {
+    max-width: 96px;
+    max-height: 96px;
+}
+
+.list-min-width {
+    min-width: 800px;
+}
+
+.pin-flex {
+    flex-shrink: 0;
 }
