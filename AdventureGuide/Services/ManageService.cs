@@ -117,7 +117,7 @@ namespace AdventureGuide.Services
         {
             ReviewViewModel viewModel = new ReviewViewModel();
             var userReviews = await _context.Review.Where(s => s.Username.Contains(userName)).ToListAsync();
-            viewModel.PageViewModel.TotalCount = await _context.Review.CountAsync();
+            viewModel.PageViewModel.TotalCount = userReviews.Count();
             viewModel.PageViewModel.PageNumber = (pageNumber ?? 1);
             foreach(Review review in userReviews.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
             {
