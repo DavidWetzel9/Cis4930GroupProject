@@ -1,27 +1,30 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject SignInManager<IdentityUser> SignInManager
 
-
-<div class="container3">
-    <ul class="nav nav-pills flex-column">
-        <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Manage">Profile</a></li>
-        <li class="nav-item"><a class="nav-link" id="change-password" asp-action="ChangePassword" asp-controller="Manage">Password</a></li>
+<div class="manage-container">
+    <nav class="menu" aria-label="Personal settings">
+        <h3 class="menu-heading">
+            Personal settings
+        </h3>
+        <a class="nav-link manage-options" asp-action="Index" asp-controller="Manage">Profile</a>
+        <a class="nav-link manage-options" id="change-password" asp-action="ChangePassword" asp-controller="Manage">Password</a>
 
         @if (User.Identity.IsAuthenticated)
         {
             @if (User.IsInRole("Admin"))
             {
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="AllReviews"> Manage Reviews </a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Users"> Manage Users </a></li>
+                <a class="nav-link manage-options" asp-area="" asp-controller="Manage" asp-action="AllReviews"> Manage Reviews </a>
+                <a class="nav-link manage-options" asp-area="" asp-controller="Manage" asp-action="Users"> Manage Users </a>
 
             }
             else if (User.IsInRole("User"))
             {
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Reviews"> Manage my Reviews </a></li>
-                <li class="nav-item"><a class="btn btn-danger mt-1" asp-area="" asp-controller="Manage" asp-action="Delete"> Delete my Account </a></li>
+                <a class="nav-link manage-options" asp-area="" asp-controller="Manage" asp-action="Reviews"> Manage my Reviews </a>
+
             }
 
         }
+    </nav>
 
-    </ul>
+    <a class=" btn-danger delete-button btn-sm mt-1" asp-area="" asp-controller="Manage" asp-action="Delete"> Delete my Account </a>
 </div>
