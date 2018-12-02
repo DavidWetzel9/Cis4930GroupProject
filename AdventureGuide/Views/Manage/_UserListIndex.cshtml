@@ -9,10 +9,10 @@
             </div>
 
             <div class="d-flex justify-content-start">
-                <form>
-                    <button class="btn btn-danger btn m1-1" type="submit" asp-controller="Manage" asp-action="DeleteAccount" asp-route-userId="@Model.Id" asp-route-username="@Model.UserName">
+                <form >
+                    <a class="btn btn-danger btn m1-1" asp-controller="Manage" asp-action="DeleteUser" asp-route-userId="@Model.Id" asp-route-userName="@Model.UserName">
                         Delete
-                    </button>
+                    </a>
                 </form>
             </div>
         </div>

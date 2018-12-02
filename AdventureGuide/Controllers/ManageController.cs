@@ -193,11 +193,12 @@ namespace AdventureGuide.Controllers
             _service.DeleteAccount(userId, userName);
         }
 
-        [HttpDelete]
+        [HttpGet]
         [Authorize(Roles ="Admin")]
-        public async void DeleteAccount(string userId)
+        public ActionResult DeleteUser(string userId, string userName)
         {
-
+            _service.DeleteAccount(userId, userName);
+            return RedirectToAction("Users");
         }
 
         [HttpGet]
