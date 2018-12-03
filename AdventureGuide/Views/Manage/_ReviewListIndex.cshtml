@@ -2,39 +2,41 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<IdentityUser> SignInManager
 
-    <li class="list-group-item list-group-item-action" style="min-width:600px;">
-        <!-- TODO: implement onclick for review entry? (show full review text)-->
-        <div>
-            @if(User.IsInRole("Admin"))
+<li class="list-group-item list-group-item-action">
+    <!-- TODO: implement onclick for review entry? (show full review text)-->
+
+    <div class="row justify-content-between pl-3">
+        <div class="d-flex flex-column">
+            @if (User.IsInRole("Admin"))
             {
-            <div class="d-flex justify-content-start">
                 <h4 class="mt-2 mr-3 text-truncate">@Model.Username</h4>
-            </div>
             }
-            <div class="d-flex justify-content-between">
-                <div class="d-flex justify-content-start">
-                    <h4 class="mt-2 mr-3 text-truncate">@Model.DestinationName</h4>
-
-                    <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
-                </div>
-
-                <div>
-                    <div class="d-flex justify-content-start">
-                        @if(User.IsInRole("User"))
-                        {
-                            <a class="btn btn-primary btn-secondary mr-1" asp-area="" asp-controller="Manage" asp-action="EditReview" asp-route-id="@Model.Id"> Edit </a>
-                        }
-                        <form>
-                            <button class="btn btn-danger btn ml-1" type="submit" asp-controller="Manage" asp-action="DeleteReview" asp-route-id="@Model.Id">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            <div>
+                <h4 class="mt-2 mr-3 text-truncate">@Model.DestinationName</h4>
             </div>
+            <div class="my-star">
+                <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
+            </div>
+        </div>
 
+        <div class="d-flex justify-content-between align-items-center">
             <div class="text-truncate">
                 @Model.Comment
             </div>
         </div>
-    </li>
+
+        <div class="d-flex justify-content-end align-items-center pr-3">
+            @if (User.IsInRole("User"))
+            {
+                <a class="btn btn-primary btn-secondary mr-1" asp-area="" asp-controller="Manage" asp-action="EditReview" asp-route-id="@Model.Id"> Edit </a>
+            }
+            <form>
+                <button class="btn btn-danger btn ml-1" type="submit" asp-controller="Manage" asp-action="DeleteReview" asp-route-id="@Model.Id">
+                    Delete
+                </button>
+            </form>
+        </div>
+
+
+    </div>
+</li>
