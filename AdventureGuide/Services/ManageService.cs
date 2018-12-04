@@ -1,12 +1,10 @@
 ﻿using AdventureGuide.Models;
-using AdventureGuide.ViewModels.DestinationViewModels;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using AdventureGuide.Models.Destinations;
-using System.Collections.Generic;
-using System;
+using AdventureGuide.ViewModels.DestinationViewModels;
 using AdventureGuide.ViewModels.ManageViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdventureGuide.Services
 {
@@ -58,22 +56,7 @@ namespace AdventureGuide.Services
                 var role = userRoles.Where(s => s.UserId.Equals(user.Id)).First();                
                 viewModel.Users.Add(user);
             }
-            //foreach(Microsoft.AspNetCore.Identity.IdentityUser user in allUsers.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize))
-            //{
-            //    var roles = userRoles.Where(s => s.UserId.Equals(user.Id)).ToList();
-            //    bool isAdmin = false;
-            //    foreach(var r in roles)
-            //    {
-            //        if (r.RoleId.Equals(adminRole.Id))
-            //        {
-            //            isAdmin = true;
-            //        }
-            //    }
-            //    if (!isAdmin)
-            //    {
-            //        viewModel.Users.Add(user);
-            //    }
-            //}
+
             return viewModel;
         }
 
@@ -151,6 +134,57 @@ namespace AdventureGuide.Services
             destination.RatingCount -= 1;
             destination.RatingSum -= review.Rating;
             _context.Review.Remove(review);
+            _context.SaveChanges();
+        }
+
+        public async Task<ViewModels.ManageViewModels.DestinationViewModel> GetDestinations(int? pageNumber, bool isMapView)
+        {
+            ViewModels.ManageViewModels.DestinationViewModel viewModel = new ViewModels.ManageViewModels.DestinationViewModel();
+            viewModel.PageViewModel.PageNumber = pageNumber ?? 1;
+            viewModel.PageViewModel.IsMapView = isMapView;
+            return await GetDestinations(viewModel);
+        }
+
+        private async Task<ViewModels.ManageViewModels.DestinationViewModel> GetDestinations(ViewModels.ManageViewModels.DestinationViewModel viewModel)
+        {
+            viewModel.PageViewModel.TotalCount = await _context.Destination.CountAsync();
+            foreach(Destination destination in await _context.Destination.Skip(((viewModel.PageViewModel.PageNumber) - 1) * viewModel.PageViewModel.PageSize).Take(viewModel.PageViewModel.PageSize).ToListAsync())
+            {
+                await GetImagePaths(destination);
+
+                viewModel.Destinations.Add(destination);
+            }
+            return viewModel;
+        }
+
+        private async Task GetImagePaths(Destination destination)
+        {
+            destination.ImagePaths = await _context.ImagePath.Where(i => i.DestinationId == destination.Id).ToListAsync();
+
+            if (!destination.ImagePaths.Any())  // check if destination has image associated with it, if not, use placeholder image
+            {
+                string defaultDestinationImagePath = "/images/defaultDestinationImage.png";
+
+                ImagePath defaultImage = new ImagePath
+                {
+                    DestinationId = destination.Id,
+                    Id = 0,
+                    Path = defaultDestinationImagePath
+                };
+
+                destination.ImagePaths.Add(defaultImage);
+            }
+        }
+
+        public async Task DeleteDestination(int id)
+        {
+            Destination destination = await _context.Destination.Where(s => s.Id == id).FirstAsync();
+            var reviewsForDestination = await _context.Review.Where(s => s.DestinationId == id).ToListAsync();
+            foreach(Review review in reviewsForDestination)
+            {
+                _context.Review.Remove(review);
+            }
+            _context.Destination.Remove(destination);
             _context.SaveChanges();
         }
     }

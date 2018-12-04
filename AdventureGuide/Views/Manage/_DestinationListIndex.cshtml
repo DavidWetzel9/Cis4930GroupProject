@@ -1,0 +1,23 @@
+﻿@model AdventureGuide.Models.Destinations.Destination;
+
+<li class="list-group-item list-group-item-action list-min-width" style="min-width:800px;">
+    <div class="d-flex justify-content-start">
+        <div class="img-container">
+            <img class="img-container img-thumbnail" src="@Url.Content(Model.ImagePaths.First().Path)" alt="Destination icon"/>
+        </div>
+        <div style="width:100%">
+            <div class="ml-2">
+                <div class="d-flex justify-content-between my-star">
+                    <h2 class="text-truncate mt-1">@Model.Name</h2>
+                    <input id="input-6" name="input-6" class="rating rating-loading" value="@Model.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
+                </div>
+                @Model.Description
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <form>
+                <button class="btn btn-danger btn m1-1" asp-controller="Manage" asp-action="DeleteDestination" asp-route-id="@Model.Id">Delete</button>
+            </form>
+        </div>
+    </div>
+</li>
