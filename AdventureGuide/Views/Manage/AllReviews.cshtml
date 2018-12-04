@@ -6,32 +6,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>All Reviews</h2>
 
-<div>
-    @if (Model.Reviews.Any())
-    {
-        @foreach (Review review in Model.Reviews)
+<div class="container">
+    <h2 class="text-center">All Reviews</h2>
+
+    <div>
+        @if (Model.Reviews.Any())
         {
-            <partial name="_ReviewListIndex" model="review" />
+            @foreach (Review review in Model.Reviews)
+            {
+                <partial name="_ReviewListIndex" model="review" />
+            }
         }
+    </div>
+
+    @{
+        var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
     }
+
+    <a asp-action="AllReviews"
+       asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="AllReviews"
+       asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+
 </div>
-
-@{
-    var prevDisabled = !Model.PageViewModel.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="AllReviews"
-   asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="AllReviews"
-   asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
-
-
