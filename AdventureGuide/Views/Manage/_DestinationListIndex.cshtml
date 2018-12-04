@@ -1,25 +1,6 @@
 ﻿@model AdventureGuide.Models.Destinations.Destination;
-@using Microsoft.AspNetCore.Identity;
 
-<li class="list-group-item list-group-item-action" style="min-width:600px;">
-    <div>
-        <div class="d-flex justify-content-between">
-            <div class="d-flex justify-content-start">
-                <h4 class="mt-2 mr-3 text-truncate">@Model.UserName</h4>
-            </div>
-
-            <div class="d-flex justify-content-start">
-                <form>
-                    <a class="btn btn-danger btn m1-1" asp-controller="Manage" asp-action="DeleteUser" asp-route-userId="@Model.Id" asp-route-userName="@Model.UserName">
-                        Delete
-                    </a>
-                </form>
-            </div>
-        </div>
-    </div>
-</li>
-
-<li class="list-group-item list-group-item-action list-min-width" style="min-width:800px;" onclick="window.location='@Url.Action("Details", new { destinationId = Model.Id })'">
+<li class="list-group-item list-group-item-action list-min-width" style="min-width:800px;">
     <div class="d-flex justify-content-start">
         <div class="img-container">
             <img class="img-container img-thumbnail" src="@Url.Content(Model.ImagePaths.First().Path)" alt="Destination icon"/>
@@ -32,6 +13,11 @@
                 </div>
                 @Model.Description
             </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <form>
+                <button class="btn btn-danger btn m1-1" asp-controller="Manage" asp-action="DeleteDestination" asp-route-id="@Model.Id">Delete</button>
+            </form>
         </div>
     </div>
 </li>

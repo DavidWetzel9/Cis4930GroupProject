@@ -175,6 +175,22 @@ namespace AdventureGuide.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Destinations(int? pageNumber, bool isMapView = false)
+        {
+            DestinationViewModel viewModel = await _service.GetDestinations(pageNumber, isMapView);
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteDestination(int id)
+        {
+            await _service.DeleteDestination(id);
+            return RedirectToAction("Destinations");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Users(int? pageNumber)
         {
             UserViewModel viewModel = await _service.GetAllUsers(pageNumber);

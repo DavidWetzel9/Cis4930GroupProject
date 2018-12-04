@@ -1,19 +1,19 @@
-﻿@model AdventureGuide.ViewModels.ManageViewModels.UserViewModel
-@using Microsoft.AspNetCore.Identity
+﻿@model AdventureGuide.ViewModels.ManageViewModels.DestinationViewModel
+@using AdventureGuide.Models.Destinations
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Destinations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Manage Users</h2>
+<h2>Manage Destinations</h2>
 
 <div>
-    @if (Model.Users.Any())
+    @if (Model.Destinations.Any())
     {
-        @foreach (Microsoft.AspNetCore.Identity.IdentityUser user in Model.Users)
+        @foreach (Destination destination in Model.Destinations)
         {
-            <partial name="_UserListIndex" model="user" />
+            <partial name="_DestinationListIndex" model="destination" />
         }
     }
 </div>
@@ -23,12 +23,12 @@
     var nextDisabled = !Model.PageViewModel.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Users"
+<a asp-action="Destinations"
    asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
-<a asp-action="Users"
+<a asp-action="Destinations"
    asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
    class="btn btn-default @nextDisabled">
     Next
