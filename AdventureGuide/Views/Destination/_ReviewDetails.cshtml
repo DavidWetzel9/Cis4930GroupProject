@@ -1,37 +1,35 @@
 ﻿@model List<AdventureGuide.Models.Destinations.Review>
 @using AdventureGuide.Models.Destinations;
 
-<div class="destination_background">
-    <div style="min-width:770px">
-        @if (!Model.Any()) // if no reviews, just have placeholder text
-        {
-            <div class="card">
-                <div class="card-body">
-                    There are no reviews for this destination!
-                </div>
+<div>
+    @if (!Model.Any()) // if no reviews, just have placeholder text
+    {
+        <div class="card">
+            <div class="card-body">
+                There are no reviews for this destination!
             </div>
-        }
+        </div>
+    }
 
-        @foreach (Review review in Model)
-        {
-            <!-- TODO: implement onclick for review entry? (show full review text)-->
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex justify-content-start my-star">
-                            <div class="font-weight-bold mt-2 mr-4" style="font-size:x-large">
-                                @review.Username
-                            </div>
-                            <input id="input-6" name="input-6" class="rating rating-loading" value="@review.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
-                        </div>
+    @foreach (Review review in Model)
+    {
+        <div class="row">
+            <div class="d-flex col-sm-12 flex-wrap">
+                <div class="mr-auto">
+                    <div class="font-weight-bold mt-2 mr-4" style="font-size:x-large">
+                        @review.Username
                     </div>
-
-                    <div style="font-size:larger">
-                        @review.Comment
+                </div>
+                <div class="ml-auto">
+                    <div class="d-flex my-star">    
+                        <input id="input-6" name="input-6" class="rating rating-loading" value="@review.Rating" data-min="0" data-max="5" data-step=".5" data-readonly="true">
                     </div>
                 </div>
             </div>
-        }
-    </div>
+            <div class="col-sm-12" style="font-size:larger">
+                @review.Comment
+            </div>
+        </div>
+    }
 </div>
 
